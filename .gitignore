@@ -9,5 +9,5 @@
 /backend/!**/src/main/**/target/
 /backend/!**/src/test/**/target/
 /backend/mvnw
-/backend/mvn.cmd
-/bakcend/maven-wrapper.propterties
+/backend/mvnw.cmd
+/backend/.mvn
