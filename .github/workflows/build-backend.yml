@@ -6,9 +6,29 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
+
+
   build:
     name: Build and analyze
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres
+
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -33,5 +53,10 @@ jobs:
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          APP_DB_URI: jdbc:postgresql://localhost:5432/postgres
+          APP_DB_USER: postgres
+          APP_DB_PW: postgres
+          HIBERNATE_DDL: create-drop
+
         working-directory: backend
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=rpbarczok-1_capstone_neuefische_1_backend
