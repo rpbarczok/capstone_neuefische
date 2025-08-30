@@ -3,8 +3,8 @@ package org.example.backend.services;
 import org.example.backend.models.Species;
 import org.example.backend.repositories.SpeciesRepository;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Value;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +17,7 @@ class SpeciesServiceTest {
     @Test
     void getAllSpecies_returnsEmptyList_WhenDBIsEmpty() {
         //given
-        List<Species> speciesList = List.of();
+        List<Species> speciesList = new ArrayList<>();
         SpeciesRepository repo = mock(SpeciesRepository.class);
         SpeciesService service = new SpeciesService(repo);
         when(repo.findAll()).thenReturn(speciesList);
@@ -32,7 +32,9 @@ class SpeciesServiceTest {
     void getAllSpecies_returnsSpeciesList_WhenSpeciesListIsNotEmpty() {
         //given
 
-        List<Species> speciesList = List.of(new Species(1, "Phidippus regius"), new Species(2, "Harpactira pulchripes"));
+        List<Species> speciesList = new ArrayList<>();
+        speciesList.add(new Species(1, "Phidippus regius"));
+        speciesList.add(new Species(2, "Harpactira pulchripes"));
         SpeciesRepository repo = mock(SpeciesRepository.class);
         SpeciesService service = new SpeciesService(repo);
         when(repo.findAll()).thenReturn(speciesList);
@@ -49,6 +51,7 @@ class SpeciesServiceTest {
         Species speciesWithId = new Species(1, "Phidippus regius");
         SpeciesRepository repo = mock(SpeciesRepository.class);
         SpeciesService service = new SpeciesService(repo);
+
         when(repo.save(species)).thenReturn(speciesWithId);
         when(repo.findById(speciesWithId.getId())).thenReturn(Optional.of(speciesWithId));
 
