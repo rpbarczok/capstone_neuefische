@@ -2,20 +2,20 @@ package org.example.backend.models;
 
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+@Data
 @Entity
 @NoArgsConstructor
 public class Species {
 
-    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer Id;
 
-    @Getter
+    @Column(nullable=false)
     private String genus;
 
     public Species(String genus) {
