@@ -40,6 +40,6 @@ public class AnimalController {
 
     @PostMapping
     public Animal addAnimal(@RequestBody AnimalDto animal){
-        return animalService.addOneAnimal(animal).orElse(null);
+        return animalService.addOneAnimal(animal);
     }
 }
