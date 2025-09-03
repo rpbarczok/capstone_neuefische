@@ -137,7 +137,6 @@ class AnimalServiceTest {
         Species speciesInput = new  Species(1, "Phidippus regius");
 
         Animal animalWithoutId = new Animal("Leonie", date,  speciesInput, Gender.FEMALE);
-        Animal animalWithId = new Animal(1, "Leonie", date,  speciesInput, Gender.FEMALE);
         AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
         when(speciesRepo.getSpeciesByGenus("Phidippus regius")).thenReturn(speciesInput);

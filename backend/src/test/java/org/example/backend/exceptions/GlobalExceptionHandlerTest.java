@@ -10,7 +10,7 @@ class GlobalExceptionHandlerTest {
 
     @Test
     void handleInternalServerException_returnsInternalServerErrorMessage() {
-        String result = handler.handleInternalServerException(new Exception("fail"));
+        String result = handler.handleInternalServerException();
         assertEquals("Internal Server Error", result);
     }
 
