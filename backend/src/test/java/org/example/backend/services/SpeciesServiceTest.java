@@ -1,5 +1,6 @@
 package org.example.backend.services;
 
+import org.example.backend.exceptions.CreationFailedException;
 import org.example.backend.models.Species;
 import org.example.backend.repositories.SpeciesRepository;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -57,9 +59,35 @@ class SpeciesServiceTest {
 
 
         // when
-        Optional<Species> actual = service.addOneSpecies(species);
+        Species actual = service.addOneSpecies(species);
 
         // then
-        assertEquals(Optional.of(speciesWithId),actual);
+        assertEquals(speciesWithId,actual);
+    }
+
+    @Test
+    void addOneSpecies_shouldThrowException_saveSpeciesFailed () {
+        // given
+        Species species = new Species("Phidippus regius");
+        SpeciesRepository repo = mock(SpeciesRepository.class);
+        SpeciesService service = new SpeciesService(repo);
+        when(repo.save(species)).thenReturn(null);
+
+        // when & then
+        assertThrows(CreationFailedException.class, () -> service.addOneSpecies(species));
+    }
+
+    @Test
+    void addOneSpecies_shouldThrowException_savedSpeciesWasNotFound () {
+        // given
+        Species species = new Species("Phidippus regius");
+        Species speciesWithId = new Species(1, "Phidippus regius");
+        SpeciesRepository repo = mock(SpeciesRepository.class);
+        SpeciesService service = new SpeciesService(repo);
+        when(repo.save(species)).thenReturn(speciesWithId);
+        when(repo.findById(speciesWithId.getId())).thenReturn(Optional.empty());
+
+        // when & then
+        assertThrows(CreationFailedException.class, () -> service.addOneSpecies(species));
     }
 }

@@ -89,4 +89,40 @@ class AnimalControllerTest {
                 ))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNotEmpty());
     }
+
+    @Test
+    void addAnimal_shouldReturn400_WhenDateIsNotParsable() throws Exception {
+        // Given
+        Species species = new Species("Phidippus regius");
+        speciesRepo.save(species);
+        //When & Then
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/animals")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                        {
+                          "name": "Leonie",
+                          "species": "Phidippus regius",
+                          "birthDate": "2asdgjlöafgj",
+                          "gender": "weiblich"
+                        }
+                """))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    void addAnimal_shouldReturn404_WhenSpeciesIsNotFound() throws Exception {
+        //When & Then
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/animals")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                        {
+                          "name": "Leonie",
+                          "species": "Phidippus regius",
+                          "birthDate": "2024-05-08",
+                          "gender": "weiblich"
+                        }
+                """))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
 }

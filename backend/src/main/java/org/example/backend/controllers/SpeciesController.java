@@ -23,7 +23,7 @@ public class SpeciesController {
 
     @PostMapping
     public Species addSpecies(@RequestBody Species species) {
-        return speciesService.addOneSpecies(species).orElse(null);
+        return speciesService.addOneSpecies(species);
     }
 
 }
