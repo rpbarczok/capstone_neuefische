@@ -6,6 +6,7 @@ import org.example.backend.models.Species;
 import org.example.backend.repositories.AnimalRepository;
 import org.example.backend.repositories.SpeciesRepository;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -58,7 +59,6 @@ class AnimalControllerTest {
                 ));
     }
 
-
     @Test
     void addAnimal_shouldReturnCreatedAnimal_WhenCalledWithValidData() throws Exception {
         // Given
@@ -79,10 +79,7 @@ class AnimalControllerTest {
                 .andExpect(MockMvcResultMatchers.content().json("""
                             {
                             "name": "Leonie",
-                            "species":
-                              {
-                                "genus": "Phidippus regius"
-                              } ,
+                            "species": "Phidippus regius",
                             "gender": "FEMALE"
                             }
                         """
@@ -125,4 +122,173 @@ class AnimalControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
+    @Test
+    void getAnimalById_shouldReturnAnimal_WhenAnimalExists() throws Exception {
+        // Given
+        Species species = new Species("Phidippus regius");
+        speciesRepo.save(species);
+        Animal animal = new Animal(
+                "Leonie",
+                LocalDate.of(2025,5,8),
+                species,
+                Gender.FEMALE
+                );
+        animalRepo.save(animal);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/animals/1"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json("""
+                  {
+                  "id": 1,
+                  "name": "Leonie",
+                  "species": "Phidippus regius",
+                  "birthDate": "2025-05-08",
+                  "gender": "FEMALE"
+                  }
+                """));
+    }
+
+    @Test
+    void getAnimalsById_shouldThrowNotFound_WhenAnimalDoesntExists() throws Exception {
+        //When & Then
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/animals/1"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    void updateAnimalById_shouldReturnUpdatedAnimal_whenCalledWithValidDataAndOnExistingAnimal() throws Exception {
+        // Given
+        Species species1 = new Species("Phidippus regius");
+        speciesRepo.save(species1);
+        Species species2 = new Species("Phidippus ardens");
+        speciesRepo.save(species2);
+        Animal animal = new Animal(
+                "Leonie",
+                LocalDate.of(2025,5,8),
+                species1,
+                Gender.FEMALE
+        );
+        animalRepo.save(animal);
+
+        // When & Then
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/animals/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                  {
+                  "id": 1,
+                  "name": "Leonie",
+                  "species": "Phidippus ardens",
+                  "birthDate": "2025-05-08",
+                  "gender": "weiblich"
+                  }
+                """))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json("""
+                  {
+                      "id": 1,
+                      "name": "Leonie",
+                      "species": "Phidippus ardens",
+                      "birthDate": "2025-05-08",
+                      "gender": "FEMALE"
+                  }
+                """));
+    }
+
+     @Test
+     void updateAnimalById_shouldReturnBadRequest_whenIdFromInstanceAndFromURIDontMatch() throws Exception {
+         // Given
+         Species species1 = new Species("Phidippus regius");
+         speciesRepo.save(species1);
+         Species species2 = new Species("Phidippus ardens");
+         speciesRepo.save(species2);
+         Animal animal = new Animal("Leonie",
+                 LocalDate.of(2025,5,8),
+                 species1,
+                 Gender.FEMALE
+         );
+         animalRepo.save(animal);
+
+         // When & Then
+         mockMvc.perform(MockMvcRequestBuilders.put("/api/animals/1")
+                         .contentType(MediaType.APPLICATION_JSON)
+                         .content("""
+                  {
+                  "id": 2,
+                  "name": "Leonie",
+                  "species": "Phidippus ardens",
+                  "birthDate": "2025-05-08",
+                  "gender": "FEMALE"
+                  }
+                """))
+                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
+     }
+
+    @Test
+    void updateAnimalById_shouldReturnNotFound_whenAnimalDoesntExist() throws Exception {
+        // When & Then
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/animals/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                  {
+                  "id": 1,
+                  "name": "Leonie",
+                  "species": "Phidippus ardens",
+                  "birthDate": "2025-05-08",
+                  "gender": "weiblich"
+                  }
+                """))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    void updateAnimalById_shouldReturnNotFound_whenSpeciesDoesntExist() throws Exception {
+        // Given
+        Species species1 = new Species("Phidippus regius");
+        speciesRepo.save(species1);
+        Animal animal = new Animal("Leonie",
+                LocalDate.of(2025,5,8),
+                species1,
+                Gender.FEMALE
+        );
+        animalRepo.save(animal);
+
+        // When & Then
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/animals/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                  {
+                  "id": 1,
+                  "name": "Leonie",
+                  "species": "Phidippus ardens",
+                  "birthDate": "2025-05-08",
+                  "gender": "FEMALE"
+                  }
+                """))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    void deleteAnimal_shouldReturnNoContent_whenAnimalWasDeletedSuccessfully() throws Exception {
+        // Given
+        Species species = new Species("Phidippus regius");
+        speciesRepo.save(species);
+        Animal animal = new Animal(
+                "Leonie",
+                LocalDate.of(2025,5,8),
+                species,
+                Gender.FEMALE
+        );
+        animalRepo.save(animal);
+
+        // When & Then
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/animals/1"))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+
+    @Test
+    void deleteAnimal_shouldReturnNotFound_whenAnimalDoesNotExist() throws Exception {
+        // When & Then
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/animals/1"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
 }

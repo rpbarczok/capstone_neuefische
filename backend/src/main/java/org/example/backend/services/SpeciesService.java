@@ -47,7 +47,9 @@ public class SpeciesService {
     public Species updateSpecies(Species species) {
         Optional<Species> oldSpecies = speciesRepository.findById(species.getId());
         if  (oldSpecies.isPresent()) {
+
             Species updatedSpecies = speciesRepository.save(species);
+
             if (updatedSpecies == null) {
                 throw new UpdateFailedException("species", species.getId());
             } else {

@@ -31,10 +31,6 @@ public class SpeciesController {
     @GetMapping("/{id}")
     public Species getSpeciesById(@PathVariable int id) {return speciesService.getSpeciesById(id);}
 
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteSpeciesById(@PathVariable int id) {speciesService.deleteSpecies(id);}
-
     @PutMapping("/{id}")
     public Species updateSpeciesById(@PathVariable int id, @RequestBody Species species) {
         if (id == species.getId()) {
@@ -42,6 +38,9 @@ public class SpeciesController {
         } else {
             throw new BadRequestException("Id of species does not match with id of URI.");
         }
-
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteSpeciesById(@PathVariable int id) {speciesService.deleteSpecies(id);}
 }
