@@ -26,6 +26,8 @@ public class SpeciesController {
         return speciesService.addOneSpecies(species);
     }
 
+    @GetMapping("/{id}")
+    public Species getSpeciesById(@PathVariable int id) {return speciesService.getSpeciesById(id);}
 
 
 }

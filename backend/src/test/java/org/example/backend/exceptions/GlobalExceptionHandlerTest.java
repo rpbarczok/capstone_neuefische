@@ -16,8 +16,15 @@ class GlobalExceptionHandlerTest {
 
     @Test
     void handleNotFoundException_returnsMessage() {
-        NameNotFoundException ex = new NameNotFoundException("Species", "Test");
+        NotFoundException ex = new NotFoundException("Species", 1);
         String result = handler.handleNotFoundException(ex);
+        assertEquals("Species with id 1 not found", result);
+    }
+
+    @Test
+    void handleNameNotFoundException_returnsMessage() {
+        NameNotFoundException ex = new NameNotFoundException("Species", "Test");
+        String result = handler.handleNameNotFoundException(ex);
         assertEquals("Species Test not found", result);
     }
 
@@ -33,5 +40,12 @@ class GlobalExceptionHandlerTest {
         CreationFailedException ex = new CreationFailedException("animal", "Test");
         String result = handler.handleCreationFailedException(ex);
         assertEquals("Creation of animal Test failed", result);
+    }
+
+    @Test
+    void handleDeletionFailedException_returnsMessage() {
+        DeletionFailedException ex = new DeletionFailedException("animal with id 1 not found", "animal", 1);
+        String result = handler.handleDeletionFailedException(ex);
+        assertEquals("Deletion of animal with id 1 failed: animal with id 1 not found", result);
     }
 }

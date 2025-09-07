@@ -2,7 +2,6 @@ package org.example.backend.controllers;
 
 import org.example.backend.models.Species;
 import org.example.backend.repositories.SpeciesRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -10,11 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -61,5 +58,31 @@ class SpeciesControllerTest {
                     }
                 """))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNotEmpty());
+    }
+
+    @Test
+    void getSpeciesById_shouldReturnsSpecies_WhenSpeciesExists() throws Exception {
+        //Given
+        Species species = new Species("phidippus regius");
+        speciesRepo.save(species);
+        //When & Then
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/species/1"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json("""
+                        [
+                          {
+                            "id": 1,
+                            "genus": "phidippus regius"
+                          }
+                        ]
+                        """
+                ));
+    }
+
+    @Test
+    void getSpeciesById_shouldThrowNotFound_WhenSpeciesDoesntExists() throws Exception {
+        //When & Then
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/species/1"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 }

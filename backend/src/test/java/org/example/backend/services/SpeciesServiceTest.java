@@ -7,7 +7,6 @@ import org.example.backend.exceptions.UpdateFailedException;
 import org.example.backend.models.Species;
 import org.example.backend.repositories.SpeciesRepository;
 import org.junit.jupiter.api.Test;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -206,8 +205,6 @@ class SpeciesServiceTest {
     void getSpeciesById_shouldThrowNotFoundError_whenSpeciesDoesntExist() {
         SpeciesRepository repo = mock(SpeciesRepository.class);
         SpeciesService service = new SpeciesService(repo);
-
-        Species species = new Species(1, "Phidippus regius");
 
         when(repo.findById(1)).thenReturn(Optional.empty());
 
