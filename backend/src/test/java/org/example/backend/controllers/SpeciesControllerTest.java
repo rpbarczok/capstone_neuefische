@@ -83,4 +83,80 @@ class SpeciesControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/species/1"))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
+
+    @Test
+    void deleteSpeciesById_shouldReturnNotContent_WhenSuccess() throws Exception {
+        //Given
+        Species species = new Species("phidippus regius");
+        speciesRepo.save(species);
+
+        //When & Then
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/species/1"))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+
+    @Test
+    void deleteSpeciesById_shouldReturn404_whenNotFound() throws Exception {
+        //When & Then
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/species/1"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    void updateSpeciesById_shouldReturnUpdatedSpecies_whenCalledWithValidDateAndOnExistingSpecies() throws Exception {
+        // given
+        Species species = new Species("phidippus regius");
+        speciesRepo.save(species);
+
+        //when & then
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/species/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                              "id": 1,
+                              "genus": "phidippus ardens"
+                             }
+                    """))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json("""
+                        {
+                            "id": 1,
+                            "genus": "phidippus ardens"
+                        }
+                        """));
+    }
+
+    @Test
+    void updateSpeciesById_shouldReturnBadRequest_whenIdFromInstanceAndFromURIDontMatch() throws Exception {
+        // given
+        Species species = new Species("phidippus regius");
+        speciesRepo.save(species);
+
+        //when & then
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/species/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                              "id": 2,
+                              "genus": "phidippus ardens"
+                             }
+                    """))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    void updateSpeciesById_shouldReturnNotFound_whenSpeciesDoesntExist() throws Exception {
+
+        //when & then
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/species/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                              "id": 1,
+                              "genus": "phidippus ardens"
+                             }
+                    """))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
 }
