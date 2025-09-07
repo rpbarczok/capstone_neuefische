@@ -69,12 +69,10 @@ class SpeciesControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/species/1"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json("""
-                        [
                           {
                             "id": 1,
                             "genus": "phidippus regius"
                           }
-                        ]
                         """
                 ));
     }
