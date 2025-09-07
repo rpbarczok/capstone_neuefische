@@ -276,7 +276,6 @@ class AnimalServiceTest {
         AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
         Species oldSpecies = new Species(1, "Phidippus regius");
-        Species newSpecies = new Species(2, "Phidippus ardens");
 
         Animal oldAnimal = new Animal(
                 1,
@@ -409,14 +408,6 @@ class AnimalServiceTest {
          AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
          Species species = new Species(1, "Phidippus regius");
-
-         Animal animal = new Animal(
-                 1,
-                 "Leonie",
-                 LocalDate.of(2025, 5,8),
-                 species,
-                 Gender.FEMALE
-         );
 
          when(animalRepo.findById(1)).thenReturn(Optional.empty());
 
