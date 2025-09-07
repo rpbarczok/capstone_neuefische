@@ -406,9 +406,6 @@ class AnimalServiceTest {
          AnimalRepository animalRepo = mock(AnimalRepository.class);
          SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
          AnimalService service = new AnimalService(animalRepo, speciesRepo);
-
-         Species species = new Species(1, "Phidippus regius");
-
          when(animalRepo.findById(1)).thenReturn(Optional.empty());
 
          // when & then
