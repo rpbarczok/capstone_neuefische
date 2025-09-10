@@ -1,0 +1,37 @@
+/* Headings */
+
+.animals-light {
+    background-color: orange;
+}
+
+.animals-dark {
+    background-color: saddlebrown;
+}
+
+.start-dark {
+    background-color: darkviolet;
+}
+
+.start-light {
+    background-color: blueviolet;
+}
+
+.terraria-dark {
+    background-color: brown;
+}
+
+.terraria-light {
+    background-color: lightcoral;
+}
+
+.heading {
+    border-radius: 25px 0 0 0;
+    padding: 10px 0 5px 10px;
+}
+
+/* Buttons */
+
+.theme-button {
+    margin-top: 5px;
+    border-radius: 50%;
+}
