@@ -14,9 +14,15 @@ public class GlobalExceptionHandler {
         return "Internal Server Error";
     }
 
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleNotFoundException(NotFoundException e) {
+        return e.getMessage();
+    }
+
     @ExceptionHandler(NameNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleNotFoundException(NameNotFoundException e) {
+    public String handleNameNotFoundException(NameNotFoundException e) {
         return e.getMessage();
     }
 
@@ -27,8 +33,15 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(CreationFailedException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleCreationFailedException(CreationFailedException e) {
         return e.getMessage();
     }
+
+    @ExceptionHandler(DeletionFailedException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String handleDeletionFailedException(DeletionFailedException e) {
+        return e.getMessage();
+    }
+
 }

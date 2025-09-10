@@ -24,7 +24,7 @@ public interface CrudRepository<T, ID> extends Repository<T, ID> {
 
 //    int count();
 //
-//    void deleteById(ID id);
+    void deleteById(ID id);
 //
 //    void delete(T entity);
 //

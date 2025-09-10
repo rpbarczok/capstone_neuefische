@@ -1,9 +1,12 @@
 package org.example.backend.controllers;
 
 import org.example.backend.dtos.AnimalDto;
-import org.example.backend.dtos.AnimalIdDto;
+import org.example.backend.dtos.AnimalIdInputDto;
+import org.example.backend.dtos.AnimalIdOutputDto;
+import org.example.backend.exceptions.BadRequestException;
 import org.example.backend.models.Animal;
 import org.example.backend.services.AnimalService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -19,18 +22,8 @@ public class AnimalController {
         this.animalService = animalService;
     }
 
-    @GetMapping
-    public List<AnimalIdDto> getAllAnimals(){
-        List<Animal> animals = animalService.getAllAnimals();
-        ArrayList<AnimalIdDto> animalIdDtos = new ArrayList<>();
-        for(Animal animal : animals){
-            animalIdDtos.add(transformAnimalToIdDto(animal));
-        }
-        return animalIdDtos;
-    }
-
-    private AnimalIdDto transformAnimalToIdDto(Animal animal){
-        return new AnimalIdDto(animal.getId(),
+    private AnimalIdOutputDto transformAnimalToIdDto(Animal animal){
+        return new AnimalIdOutputDto(animal.getId(),
                 animal.getName(),
                 animal.getBirthDate().toString(),
                 animal.getAge(),
@@ -38,8 +31,41 @@ public class AnimalController {
                 animal.getGender().toString());
     }
 
+    @GetMapping
+    public List<AnimalIdOutputDto> getAllAnimals(){
+        List<Animal> animals = animalService.getAllAnimals();
+        ArrayList<AnimalIdOutputDto> animalIdOutputDtos = new ArrayList<>();
+        for(Animal animal : animals){
+            animalIdOutputDtos.add(transformAnimalToIdDto(animal));
+        }
+        return animalIdOutputDtos;
+    }
+
     @PostMapping
-    public Animal addAnimal(@RequestBody AnimalDto animal){
-        return animalService.addOneAnimal(animal);
+    public AnimalIdOutputDto addAnimal(@RequestBody AnimalDto animalDto){
+        Animal animal = animalService.addOneAnimal(animalDto);
+        return transformAnimalToIdDto(animal);
+    }
+
+    @GetMapping("/{id}")
+    public AnimalIdOutputDto getAnimalById(@PathVariable int id){
+        Animal animal = animalService.getAnimalById(id);
+        return transformAnimalToIdDto(animal);
+    }
+
+    @PutMapping("/{id}")
+    public AnimalIdOutputDto updateAnimal(@PathVariable int id, @RequestBody AnimalIdInputDto animalIdInputDto){
+        if (id == animalIdInputDto.getId()){
+            Animal animal = animalService.updateAnimal(animalIdInputDto);
+            return transformAnimalToIdDto(animal);
+        } else {
+            throw new BadRequestException("Id of animal does not match with id of URI.");
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAnimal(@PathVariable int id){
+        animalService.deleteAnimal(id);
     }
 }

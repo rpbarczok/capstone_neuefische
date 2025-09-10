@@ -7,11 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AnimalIdDto {
+public class AnimalIdInputDto {
     private int id;
     private String name;
     private String birthDate;
-    private Long age;
     private String species;
     private String gender;
 }
