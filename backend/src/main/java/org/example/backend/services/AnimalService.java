@@ -45,7 +45,8 @@ public class AnimalService {
     }
 
     public List<Animal> getAllAnimals(){
-        return (List<Animal>) animalRepository.findAll();
+        List<Animal> result = (List<Animal>) animalRepository.findAll();
+        return result;
     }
 
     public Animal getAnimalById(int id) {

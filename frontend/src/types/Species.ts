@@ -1,0 +1,4 @@
+export type Species = {
+    id: number,
+    genus: string
+}

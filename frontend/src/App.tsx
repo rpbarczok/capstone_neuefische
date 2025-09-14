@@ -1,32 +1,28 @@
-import Router from "./pages/Router"
-import Navigation from "./components/Navigation.tsx";
-import Footer from "./components/Footer.tsx";
-import {Col, Container, Row} from "react-bootstrap";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import { ThemeContext } from './contexts/ThemeContext.ts';
 import {LoadingContext} from "./contexts/LoadingContext.ts";
+import BasicStructure from "./BasicStructure.tsx";
 
 function App() {
 
     const [theme, setTheme] = useState<'light' | 'dark'>(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
     const [isLoading, setIsLoading] = useState(false)
+
+    useEffect(() => {
+        if (theme === 'light') {
+            document.getElementsByTagName('html')[0].setAttribute('data-bs-theme', 'light')
+        } else {
+            document.getElementsByTagName('html')[0].setAttribute('data-bs-theme', 'dark')
+        }
+    }, [])
+
     return (
-      <ThemeContext.Provider value={theme}>
-          <LoadingContext.Provider value={{ isLoading: isLoading, setIsLoading: setIsLoading }}>
-          <Container fluid className='d-flex flex-column vh-100'>
-              <Row>
-                  <Navigation theme={theme}
-                              setTheme={setTheme}/>
-              </Row>
-              <Row className="flex-grow-1">
-                  <Col>
-                      <Router/>
-                  </Col>
-              </Row>
-              <Row className="bg-body-secondary">
-                  <Footer />
-              </Row>
-          </Container>
+        <ThemeContext.Provider value={theme}>
+            <LoadingContext.Provider value={{ isLoading: isLoading, setIsLoading: setIsLoading }}>
+                <BasicStructure
+                    setTheme={setTheme}
+                    theme={theme}
+                    isLoading={isLoading}/>
           </LoadingContext.Provider>
       </ThemeContext.Provider>
     )

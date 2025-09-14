@@ -9,6 +9,8 @@ import org.example.backend.services.AnimalService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,11 +28,20 @@ public class AnimalController {
         return new AnimalIdOutputDto(animal.getId(),
                 animal.getName(),
                 animal.getBirthDate().toString(),
-                animal.getAge(),
+                ChronoUnit.DAYS.between(animal.getBirthDate(), LocalDate.now()),
                 animal.getSpecies().getGenus(),
-                animal.getGender().toString());
+                transformToGender(String.valueOf(animal.getGender()))
+        );
     }
 
+    private String transformToGender(String gender){
+        return switch (gender) {
+            case "MALE" -> "männlich";
+            case "FEMALE" -> "weiblich";
+            case "HERMAPHRODITE" -> "zweigeschlechtlich";
+            default -> "unbekannt";
+        };
+    }
     @GetMapping
     public List<AnimalIdOutputDto> getAllAnimals(){
         List<Animal> animals = animalService.getAllAnimals();
@@ -38,6 +49,7 @@ public class AnimalController {
         for(Animal animal : animals){
             animalIdOutputDtos.add(transformAnimalToIdDto(animal));
         }
+        System.out.println(animalIdOutputDtos);
         return animalIdOutputDtos;
     }
 

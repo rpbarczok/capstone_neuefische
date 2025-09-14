@@ -4,6 +4,6 @@ export default function TerrariumPage () {
     return (
         <Title
             title="Deine Lieblinge ihre Wohnungen"
-            cssClass="terraria"/>
+            page="terraria"/>
     )
 }

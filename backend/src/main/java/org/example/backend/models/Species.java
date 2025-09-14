@@ -15,7 +15,7 @@ public class Species {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer Id;
 
-    @Column(nullable=false)
+    @Column(nullable=false, unique=true)
     private String genus;
 
     public Species(String genus) {

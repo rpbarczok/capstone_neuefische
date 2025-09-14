@@ -3,7 +3,7 @@ import Title from "../components/Title.tsx";
 export default function HomePage () {
     return (
         <>
-            <Title title="Die Terrarium-Tracker-App" cssClass="start"/>
+            <Title title="Die Terrarium-Tracker-App" page="start"/>
             <div>
                 <p>
                     Dies ist mein Abschlussprojekt für das <a href="https://www.neuefische.de/bootcamp/java-development">
