@@ -19,7 +19,7 @@ export default function BasicStructure({theme, setTheme, isLoading}: BasicStruct
 
     const [notes, addNote, removeNote] = useNotes()
     const [animalList, getAnimals, addAnimal] = useAnimals(addNote)
-    const [speciesList, getSpecies] = useSpecies(addNote)
+    const [speciesList, getSpecies, addSpecies] = useSpecies(addNote)
 
     return (
         <Container fluid className='d-flex flex-column vh-100'>
@@ -37,6 +37,7 @@ export default function BasicStructure({theme, setTheme, isLoading}: BasicStruct
                         addAnimal={addAnimal}
                         speciesList={speciesList}
                         getSpecies={getSpecies}
+                        addSpecies={addSpecies}
                     />
                 </Col>
             </Row>

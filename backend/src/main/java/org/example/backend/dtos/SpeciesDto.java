@@ -8,4 +8,5 @@ import lombok.NoArgsConstructor;
 public class SpeciesDto {
 
     private String genus;
+    private String imgUrl;
 }

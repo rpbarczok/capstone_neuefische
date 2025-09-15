@@ -32,16 +32,16 @@ export default function useSpecies(addNotes: (note: Note)=> void)
         setIsLoading(true)
         try {
             const response = await axios.post("api/species", species)
-        if (response.data !== null) {
+            if (response.data !== null) {
+                setIsLoading(false)
+                void getSpecies()
+                addNotes({message: response.data.genus + " wurde erfolgreich angelegt.", variant: "success"})
+            }
+        } catch (e) {
             setIsLoading(false)
-            void getSpecies()
-            addNotes({message: response.data.name + " wurde erfolgreich angelegt.", variant: "success"})
+                addNotes({message: "Es ist nicht gelungen, eine neues Spezies anzulegen: " + e, variant: "danger"})
         }
-    } catch (e) {
-        setIsLoading(false)
-        addNotes({message: "Es ist nicht gelungen, eine neues Spezies anzulegen: " + e, variant: "danger"})
     }
-}
 //    const updateSpecies (species: Species): Species {}
 
 //    const deleteSpecies (id: number) {}

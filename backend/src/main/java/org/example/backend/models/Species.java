@@ -18,12 +18,16 @@ public class Species {
     @Column(nullable=false, unique=true)
     private String genus;
 
-    public Species(String genus) {
+    private String imgUrl;
+
+    public Species(String genus, String imgUrl) {
         this.genus=genus;
+        this.imgUrl=imgUrl;
     }
 
-    public Species(Integer id, String genus) {
+    public Species(Integer id, String genus, String imgUrl) {
         this.genus=genus;
+        this.imgUrl=imgUrl;
         this.Id=id;
     }
 

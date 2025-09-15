@@ -45,7 +45,7 @@ class AnimalServiceTest {
     @Test
     void getAllAnimals_returnsAnimalsList_WhenAnimalListIsNotEmpty() {
         // given
-        Animal animal = new Animal("Leonie", LocalDate.of(2025, 5, 8),  new Species("Phidippus regius"), Gender.FEMALE);
+        Animal animal = new Animal("Leonie", LocalDate.of(2025, 5, 8),  new Species("Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg"), Gender.FEMALE);
         ArrayList<Animal> animalList = new ArrayList<>();
         animalList.add(animal);
 
@@ -72,7 +72,7 @@ class AnimalServiceTest {
         AnimalRepository animalRepo = mock(AnimalRepository.class);
         SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
 
-        Species speciesInput = new  Species(1, "Phidippus regius");
+        Species speciesInput = new  Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
 
         Animal animalWithoutId = new Animal("Leonie", date,  speciesInput, Gender.FEMALE);
         Animal animalWithId = new Animal(1, "Leonie", date,  speciesInput, Gender.FEMALE);
@@ -115,7 +115,7 @@ class AnimalServiceTest {
         AnimalRepository animalRepo = mock(AnimalRepository.class);
         SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
 
-        Species speciesInput = new  Species(1, "Phidippus regius");
+        Species speciesInput = new  Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
 
         AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
@@ -136,7 +136,7 @@ class AnimalServiceTest {
         AnimalRepository animalRepo = mock(AnimalRepository.class);
         SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
 
-        Species speciesInput = new  Species(1, "Phidippus regius");
+        Species speciesInput = new  Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
 
         Animal animalWithoutId = new Animal("Leonie", date,  speciesInput, Gender.FEMALE);
         AnimalService service = new AnimalService(animalRepo, speciesRepo);
@@ -159,7 +159,7 @@ class AnimalServiceTest {
         AnimalRepository animalRepo = mock(AnimalRepository.class);
         SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
 
-        Species speciesInput = new  Species(1, "Phidippus regius");
+        Species speciesInput = new  Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
 
         Animal animalWithoutId = new Animal("Leonie", date,  speciesInput, Gender.FEMALE);
         Animal animalWithId = new Animal(1, "Leonie", date,  speciesInput, Gender.FEMALE);
@@ -180,7 +180,7 @@ class AnimalServiceTest {
         SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
         AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
-        Species species = new Species(1, "Phidippus regius");
+        Species species = new Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
         Animal animal = new Animal(1,
                 "Leonie",
                 LocalDate.of(2025,5,8),
@@ -211,8 +211,8 @@ class AnimalServiceTest {
         SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
         AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
-        Species oldSpecies = new Species(1, "Phidippus regius");
-        Species newSpecies = new Species(2, "Phidippus ardens");
+        Species oldSpecies = new Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species newSpecies = new Species(2, "Phidippus ardens", "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg");
 
         Animal oldAnimal = new Animal(
                 1,
@@ -275,7 +275,7 @@ class AnimalServiceTest {
         SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
         AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
-        Species oldSpecies = new Species(1, "Phidippus regius");
+        Species oldSpecies = new Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
 
         Animal oldAnimal = new Animal(
                 1,
@@ -305,8 +305,8 @@ class AnimalServiceTest {
         SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
         AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
-        Species oldSpecies = new Species(1, "Phidippus regius");
-        Species newSpecies = new Species(2, "Phidippus ardens");
+        Species oldSpecies = new Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species newSpecies = new Species(2, "Phidippus ardens", "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg");
 
         Animal oldAnimal = new Animal(
                 1,
@@ -339,8 +339,8 @@ class AnimalServiceTest {
         SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
         AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
-        Species oldSpecies = new Species(1, "Phidippus regius");
-        Species newSpecies = new Species(2, "Phidippus ardens");
+        Species oldSpecies = new Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species newSpecies = new Species(2, "Phidippus ardens", "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg");
 
         Animal oldAnimal = new Animal(
                 1,
@@ -381,7 +381,7 @@ class AnimalServiceTest {
          SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
          AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
-         Species species = new Species(1, "Phidippus regius");
+         Species species = new Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
 
          Animal animal = new Animal(
                  1,
@@ -419,7 +419,7 @@ class AnimalServiceTest {
         SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
         AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
-        Species species = new Species(1, "Phidippus regius");
+        Species species = new Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
 
         Animal animal = new Animal(
                 1,
@@ -444,7 +444,7 @@ class AnimalServiceTest {
         SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
         AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
-        Species species = new Species(1, "Phidippus regius");
+        Species species = new Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
 
         Animal animal = new Animal(
                 1,

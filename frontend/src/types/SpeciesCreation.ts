@@ -1,3 +1,4 @@
 export type SpeciesCreation = {
-    genus: string
+    genus: string,
+    imgUrl: string
 }

@@ -1,4 +1,5 @@
 export type Species = {
     id: number,
-    genus: string
+    genus: string,
+    imgUrl: string
 }

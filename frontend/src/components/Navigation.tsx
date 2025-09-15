@@ -25,6 +25,9 @@ export default function Navigation ({theme, setTheme}: NavigationProps) {
             <Nav.Item >
                 <Nav.Link onClick={() => nav("/terraria")}>Wohnungen</Nav.Link>
             </Nav.Item>
+            <Nav.Item >
+                <Nav.Link onClick={() => nav("/species")}>Spezies</Nav.Link>
+            </Nav.Item>
             <Nav.Item className="ms-auto">
                 <Button className="theme-button" onClick={() => toggleTheme(theme, setTheme)}>
                     {theme === "dark" ? <MoonStarsFill/> : <SunFill/>}

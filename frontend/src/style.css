@@ -8,6 +8,14 @@
     background-color: saddlebrown;
 }
 
+.species-light {
+    background-color: greenyellow;
+}
+
+.species-dark {
+    background-color: darkgreen;
+}
+
 .start-dark {
     background-color: darkviolet;
 }
@@ -29,7 +37,15 @@
     padding: 10px 0 5px 10px;
 }
 
-/* Buttons */
+/* Image Url */
+
+.speciesImage {
+    border-radius: 50%;
+}
+
+
+     /* Buttons */
+
 
 .theme-button {
     margin-top: 5px;
