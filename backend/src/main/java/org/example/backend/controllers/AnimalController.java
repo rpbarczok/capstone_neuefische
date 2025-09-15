@@ -49,7 +49,6 @@ public class AnimalController {
         for(Animal animal : animals){
             animalIdOutputDtos.add(transformAnimalToIdDto(animal));
         }
-        System.out.println(animalIdOutputDtos);
         return animalIdOutputDtos;
     }
 

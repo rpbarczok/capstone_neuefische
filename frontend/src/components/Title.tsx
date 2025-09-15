@@ -7,7 +7,7 @@ import {PlusCircle} from "react-bootstrap-icons";
 type TitleProps = {
     title: string,
     page: string,
-    setShow: (show: boolean) => void
+    setShow?: (show: boolean) => void
 }
 
 export default function Title ( { title, page, setShow } : TitleProps) {
@@ -22,7 +22,7 @@ export default function Title ( { title, page, setShow } : TitleProps) {
                 </h5>
             </Col>
             <Col>
-                {page!=="start"?<PlusCircle size={24} className="float-end" onClick={()=>setShow(true)}/>:""}
+                {setShow!==undefined?<PlusCircle size={24} className="float-end" onClick={()=>setShow(true)}/>:""}
             </Col>
         </Row>
     )

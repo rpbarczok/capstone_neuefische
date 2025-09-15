@@ -4,11 +4,12 @@ import TerrariumPage from "./TerrariumPage.tsx";
 import HomePage from "./HomePage.tsx";
 import type {Animal} from "../types/Animal.ts";
 import type {Species} from "../types/Species.ts";
+import type {AnimalCreation} from "../types/AnimalCreation.ts";
 
 type RouterProps = {
     animalList: Animal[],
     getAnimals: () => void,
-    addAnimal: (animal: Animal) => void,
+    addAnimal: (animal: AnimalCreation) => void,
     speciesList: Species[],
     getSpecies: () => void,
 }

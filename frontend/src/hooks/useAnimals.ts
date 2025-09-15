@@ -4,9 +4,10 @@ import {LoadingContext} from "../contexts/LoadingContext.ts";
 import axios from "axios";
 import type {Note} from "../types/Note.ts";
 import {useContextThrowUndefined} from "../contexts/contextUndefined.ts";
+import type {AnimalCreation} from "../types/AnimalCreation.ts";
 
 export default function useAnimals(addNotes: (note: Note)=> void)
-    : [Animal[], () => void, (animal: Animal) => void]
+    : [Animal[], () => void, (animal: AnimalCreation) => void]
 {
     const [animalList, setAnimalList] = useState<Animal[]>([])
     const {setIsLoading } = useContextThrowUndefined<{ isLoading: boolean, setIsLoading: (isLoading: boolean) => void }> (LoadingContext)
@@ -27,7 +28,7 @@ export default function useAnimals(addNotes: (note: Note)=> void)
         }
     }
 
-    async function addAnimal(animal: Animal) {
+    async function addAnimal(animal: AnimalCreation) {
         setIsLoading(true)
         try {
             const response = await axios.post("api/animals", animal)

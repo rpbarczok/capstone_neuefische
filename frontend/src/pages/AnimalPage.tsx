@@ -5,11 +5,12 @@ import AnimalCard from "../components/animals/AnimalCard.tsx";
 import {Col, Row} from "react-bootstrap";
 import {useState} from "react";
 import AnimalAddForm from "../components/animals/AnimalAddForm.tsx";
+import type {AnimalCreation} from "../types/AnimalCreation.ts";
 
 type AnimalPageProps = {
     animalList: Animal[],
     getAnimals: () => void,
-    addAnimal: (animal: Animal) => void,
+    addAnimal: (animal: AnimalCreation) => void,
     speciesList: Species[],
     getSpecies: () => void
 }
