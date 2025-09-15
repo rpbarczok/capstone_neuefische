@@ -23,4 +23,13 @@ public enum Gender {
             default -> Gender.UNKNOWN;
         };
     }
+
+    public static String getGenderStringFromGender(String gender) {
+        return switch (gender) {
+            case "MALE" -> "männlich";
+            case "FEMALE" -> "weiblich";
+            case "HERMAPHRODITE" -> "zweigeschlechtlich";
+            default -> "unbekannt";
+        };
+    }
 }
