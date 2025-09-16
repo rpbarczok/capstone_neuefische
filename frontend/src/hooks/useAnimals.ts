@@ -7,10 +7,13 @@ import {useContextThrowUndefined} from "../contexts/contextUndefined.ts";
 import type {AnimalCreation} from "../types/AnimalCreation.ts";
 
 export default function useAnimals(addNotes: (note: Note)=> void)
-    : [Animal[], () => void, (animal: AnimalCreation) => void]
-{
+    : [Animal[], (animal: AnimalCreation) => void, (animal: Animal) => void] {
+
     const [animalList, setAnimalList] = useState<Animal[]>([])
-    const {setIsLoading } = useContextThrowUndefined<{ isLoading: boolean, setIsLoading: (isLoading: boolean) => void }> (LoadingContext)
+    const {setIsLoading} = useContextThrowUndefined<{
+        isLoading: boolean,
+        setIsLoading: (isLoading: boolean) => void
+    }>(LoadingContext)
 
     useEffect(() => {
         void getAnimals()
@@ -45,7 +48,19 @@ export default function useAnimals(addNotes: (note: Note)=> void)
 
 //    const updateAnimals (animal: Animal): Animal {}
 
-//    const deleteAnimals (id: number) {}
+    async function deleteAnimal(animal: Animal) {
+        setIsLoading(true)
+        try {
+            await axios.delete("/api/animals/" + animal.id)
+            setIsLoading(false)
+            void getAnimals()
+            addNotes({message: animal.name + " wurde erfolgreich gelöscht.", variant: "success"})
+        } catch (e) {
+            setIsLoading(false)
+            addNotes({message: "Es ist nicht gelungen, die " + animal.name + " zu löschen:" + e, variant: "danger"})
+        }
+    }
 
-    return [animalList, getAnimals, addAnimal];
+    return [animalList, addAnimal, deleteAnimal];
+
 }

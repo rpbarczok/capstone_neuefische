@@ -9,13 +9,12 @@ import type {AnimalCreation} from "../types/AnimalCreation.ts";
 
 type AnimalPageProps = {
     animalList: Animal[],
-    getAnimals: () => void,
     addAnimal: (animal: AnimalCreation) => void,
     speciesList: Species[],
-    getSpecies: () => void
+    deleteAnimal: (animal: Animal) => void
 }
 
-export default function AnimalPage({animalList, addAnimal, speciesList}: AnimalPageProps) {
+export default function AnimalPage({animalList, addAnimal, deleteAnimal, speciesList}: AnimalPageProps) {
     const [show, setShow] = useState<boolean>(false)
 
 
@@ -35,7 +34,7 @@ export default function AnimalPage({animalList, addAnimal, speciesList}: AnimalP
                 {animalList.length === 0
                     ? <p>Keine Tiere eingetragen</p>
                     :
-                    animalList.map(animal => <Col xs={2}><AnimalCard animal={animal}/></Col>)
+                    animalList.map(animal => <Col xs={2}><AnimalCard animal={animal} deleteAnimal={deleteAnimal}/></Col>)
                 }
             </Row>
 

@@ -2,34 +2,32 @@ import {Route, Routes} from "react-router-dom";
 import AnimalPage from "./AnimalPage.tsx";
 import TerrariumPage from "./TerrariumPage.tsx";
 import HomePage from "./HomePage.tsx";
-import type {Animal} from "../types/Animal.ts";
-import type {Species} from "../types/Species.ts";
-import type {AnimalCreation} from "../types/AnimalCreation.ts";
 import SpeciesPage from "./SpeciesPage.tsx";
-import type { SpeciesCreation } from "../types/SpeciesCreation.ts";
+import useAnimals from "../hooks/useAnimals.ts";
+import useSpecies from "../hooks/useSpecies.ts";
+import type {Note} from "../types/Note.ts";
 
 type RouterProps = {
-    animalList: Animal[],
-    getAnimals: () => void,
-    addAnimal: (animal: AnimalCreation) => void,
-    addSpecies: (species: SpeciesCreation) => void,
-    speciesList: Species[],
-    getSpecies: () => void
+    addNote: (note: Note) => void
 }
 
-export default function AppRouter({animalList, getAnimals, addAnimal, speciesList, getSpecies, addSpecies}: RouterProps) {
+export default function AppRouter({addNote}: RouterProps) {
+    const [animalList, addAnimal, deleteAnimal] = useAnimals(addNote)
+    const [speciesList, addSpecies, deleteSpecies] = useSpecies(addNote)
     return (
         <Routes>
             <Route path="/" element={<HomePage/>}/>
             <Route path="/animals" element={<AnimalPage
                 animalList={animalList}
-                getAnimals={getAnimals}
                 addAnimal={addAnimal}
+                deleteAnimal={deleteAnimal}
                 speciesList={speciesList}
-                getSpecies={getSpecies}
             />}/>
             <Route path="/terraria" element={<TerrariumPage/>}/>
-            <Route path="/species" element={<SpeciesPage speciesList={speciesList} addSpecies={addSpecies} />} />
+            <Route path="/species" element={<SpeciesPage
+                speciesList={speciesList}
+                addSpecies={addSpecies}
+                deleteSpecies={deleteSpecies}/>} />
         </Routes>
 
     )
