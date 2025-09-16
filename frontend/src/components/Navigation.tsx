@@ -1,4 +1,4 @@
-import millipede from "../assets/millipedes32.png"
+import millipede from "../assets/millipede32.png"
 import {Button, Nav, Image} from "react-bootstrap";
 import {MoonStarsFill, SunFill} from "react-bootstrap-icons";
 import {useNavigate} from "react-router-dom";
@@ -24,6 +24,9 @@ export default function Navigation ({theme, setTheme}: NavigationProps) {
             </Nav.Item>
             <Nav.Item >
                 <Nav.Link onClick={() => nav("/terraria")}>Wohnungen</Nav.Link>
+            </Nav.Item>
+            <Nav.Item >
+                <Nav.Link onClick={() => nav("/species")}>Spezies</Nav.Link>
             </Nav.Item>
             <Nav.Item className="ms-auto">
                 <Button className="theme-button" onClick={() => toggleTheme(theme, setTheme)}>

@@ -27,5 +27,26 @@ class GenderTest {
         assertEquals(Gender.UNKNOWN, Gender.getGenderFromString(""));
     }
 
+    @Test
+    void getGenderStringFromGender_shouldReturnMaennlich() {
+        assertEquals("männlich", Gender.getGenderStringFromGender("MALE"));
+    }
+
+    @Test
+    void getGenderStringFromGender_shouldReturnWeiblich() {
+        assertEquals("weiblich", Gender.getGenderStringFromGender("FEMALE"));
+    }
+
+    @Test
+    void getGenderStringFromGender_shouldReturnHermaphrodite() {
+        assertEquals("zweigeschlechtlich", Gender.getGenderStringFromGender("HERMAPHRODITE"));
+    }
+
+    @Test
+    void getGenderStringFromGender_shouldReturnUnknownForOther() {
+        assertEquals("unbekannt", Gender.getGenderStringFromGender("divers"));
+        assertEquals("unbekannt", Gender.getGenderStringFromGender(""));
+    }
+
 
 }

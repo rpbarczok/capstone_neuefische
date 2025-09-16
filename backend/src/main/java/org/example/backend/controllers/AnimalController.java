@@ -5,10 +5,12 @@ import org.example.backend.dtos.AnimalIdInputDto;
 import org.example.backend.dtos.AnimalIdOutputDto;
 import org.example.backend.exceptions.BadRequestException;
 import org.example.backend.models.Animal;
+import org.example.backend.models.Gender;
 import org.example.backend.services.AnimalService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,9 +28,10 @@ public class AnimalController {
         return new AnimalIdOutputDto(animal.getId(),
                 animal.getName(),
                 animal.getBirthDate().toString(),
-                animal.getAge(),
+                ChronoUnit.DAYS.between(animal.getBirthDate(), LocalDate.now()),
                 animal.getSpecies().getGenus(),
-                animal.getGender().toString());
+                Gender.getGenderStringFromGender(String.valueOf(animal.getGender()))
+        );
     }
 
     @GetMapping

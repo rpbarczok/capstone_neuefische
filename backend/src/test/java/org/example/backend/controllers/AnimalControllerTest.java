@@ -5,6 +5,7 @@ import org.example.backend.models.Gender;
 import org.example.backend.models.Species;
 import org.example.backend.repositories.AnimalRepository;
 import org.example.backend.repositories.SpeciesRepository;
+import org.example.backend.services.AnimalService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -35,7 +36,7 @@ class AnimalControllerTest {
     @Test
     void getAllAnimals_shouldReturnListOfAnimals_whenCalled() throws Exception {
         // Given
-        Species species = new Species("Phidippus regius");
+        Species species = new Species("Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
         Species newSpecies = speciesRepo.save(species);
         LocalDate birthDate = LocalDate.of(2025, 5,8);
         Animal animal = new Animal("Leonie", birthDate, newSpecies, Gender.FEMALE);
@@ -51,7 +52,7 @@ class AnimalControllerTest {
                             "name": "Leonie",
                             "species" : "Phidippus regius",
                             "birthDate": "2025-05-08",
-                            "gender": "FEMALE"
+                            "gender": "weiblich"
                           }
                         ]
                         """
@@ -61,7 +62,7 @@ class AnimalControllerTest {
     @Test
     void addAnimal_shouldReturnCreatedAnimal_WhenCalledWithValidData() throws Exception {
         // Given
-        Species species = new Species("Phidippus regius");
+        Species species = new Species("Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
         speciesRepo.save(species);
         //When & Then
         mockMvc.perform(MockMvcRequestBuilders.post("/api/animals")
@@ -79,7 +80,7 @@ class AnimalControllerTest {
                             {
                             "name": "Leonie",
                             "species": "Phidippus regius",
-                            "gender": "FEMALE"
+                            "gender": "weiblich"
                             }
                         """
                 ))
@@ -89,7 +90,7 @@ class AnimalControllerTest {
     @Test
     void addAnimal_shouldReturn400_WhenDateIsNotParsable() throws Exception {
         // Given
-        Species species = new Species("Phidippus regius");
+        Species species = new Species("Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
         speciesRepo.save(species);
         //When & Then
         mockMvc.perform(MockMvcRequestBuilders.post("/api/animals")
@@ -124,7 +125,7 @@ class AnimalControllerTest {
     @Test
     void getAnimalById_shouldReturnAnimal_WhenAnimalExists() throws Exception {
         // Given
-        Species species = new Species("Phidippus regius");
+        Species species = new Species("Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
         speciesRepo.save(species);
         Animal animal = new Animal(
                 "Leonie",
@@ -142,7 +143,7 @@ class AnimalControllerTest {
                   "name": "Leonie",
                   "species": "Phidippus regius",
                   "birthDate": "2025-05-08",
-                  "gender": "FEMALE"
+                  "gender": "weiblich"
                   }
                 """));
     }
@@ -157,9 +158,9 @@ class AnimalControllerTest {
     @Test
     void updateAnimalById_shouldReturnUpdatedAnimal_whenCalledWithValidDataAndOnExistingAnimal() throws Exception {
         // Given
-        Species species1 = new Species("Phidippus regius");
+        Species species1 = new Species("Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
         speciesRepo.save(species1);
-        Species species2 = new Species("Phidippus ardens");
+        Species species2 = new Species("Phidippus ardens", "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg");
         speciesRepo.save(species2);
         Animal animal = new Animal(
                 "Leonie",
@@ -188,7 +189,7 @@ class AnimalControllerTest {
                       "name": "Leonie",
                       "species": "Phidippus ardens",
                       "birthDate": "2025-05-08",
-                      "gender": "FEMALE"
+                      "gender": "weiblich"
                   }
                 """));
     }
@@ -196,9 +197,9 @@ class AnimalControllerTest {
      @Test
      void updateAnimalById_shouldReturnBadRequest_whenIdFromInstanceAndFromURIDontMatch() throws Exception {
          // Given
-         Species species1 = new Species("Phidippus regius");
+         Species species1 = new Species("Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
          speciesRepo.save(species1);
-         Species species2 = new Species("Phidippus ardens");
+         Species species2 = new Species("Phidippus ardens", "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg");
          speciesRepo.save(species2);
          Animal animal = new Animal("Leonie",
                  LocalDate.of(2025,5,8),
@@ -242,7 +243,7 @@ class AnimalControllerTest {
     @Test
     void updateAnimalById_shouldReturnNotFound_whenSpeciesDoesntExist() throws Exception {
         // Given
-        Species species1 = new Species("Phidippus regius");
+        Species species1 = new Species("Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
         speciesRepo.save(species1);
         Animal animal = new Animal("Leonie",
                 LocalDate.of(2025,5,8),
@@ -269,7 +270,7 @@ class AnimalControllerTest {
     @Test
     void deleteAnimal_shouldReturnNoContent_whenAnimalWasDeletedSuccessfully() throws Exception {
         // Given
-        Species species = new Species("Phidippus regius");
+        Species species = new Species("Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
         speciesRepo.save(species);
         Animal animal = new Animal(
                 "Leonie",
@@ -290,4 +291,5 @@ class AnimalControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/animals/1"))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
+
 }
