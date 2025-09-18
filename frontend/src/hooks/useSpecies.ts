@@ -7,7 +7,7 @@ import axios from "axios";
 import type {SpeciesCreation} from "../types/SpeciesCreation.ts";
 
 export default function useSpecies(addNotes: (note: Note)=> void)
-    : [Species[], () => void, (species: SpeciesCreation) => void]
+    : [Species[], (species: SpeciesCreation) => void, (species: Species) => void]
 {
     const [speciesList, setSpeciesList] = useState<Species[]>([])
     const {setIsLoading } = useContextThrowUndefined<{ isLoading: boolean, setIsLoading: (isLoading: boolean) => void }> (LoadingContext)
@@ -44,7 +44,18 @@ export default function useSpecies(addNotes: (note: Note)=> void)
     }
 //    const updateSpecies (species: Species): Species {}
 
-//    const deleteSpecies (id: number) {}
+    async function deleteSpecies (species: Species) {
+        setIsLoading(true)
+        try {
+            await axios.delete("/api/species/"+species.id)
+            setIsLoading(false)
+            void getSpecies()
+            addNotes({message: "Spezies " + species.genus + " wurde erfolgreich gelöscht.", variant: "success"})
+        } catch (e) {
+            setIsLoading(false)
+            addNotes({message: "Es ist nicht gelungen, die Species " + species.genus + " zu löschen:" + e, variant: "danger" })
+        }
+}
 
-    return [speciesList, getSpecies, addSpecies];
+    return [speciesList, addSpecies, deleteSpecies];
 }
