@@ -32,21 +32,25 @@ public class Animal {
     @Column(nullable = false)
     private Gender gender;
 
-    public Animal(String name, LocalDate birthDate, Species species, Gender gender) {
+    private String imgUrl;
+
+    public Animal(String name, LocalDate birthDate, Species species, Gender gender, String imgUrl) {
         this.name = name;
         this.age = ChronoUnit.DAYS.between(birthDate, LocalDate.now());
         this.birthDate = birthDate;
         this.species = species;
         this.gender = gender;
+        this.imgUrl = imgUrl;
     }
 
-    public Animal(int id, String name, LocalDate birthDate, Species species, Gender gender) {
+    public Animal(int id, String name, LocalDate birthDate, Species species, Gender gender, String imgUrl) {
         this.id = id;
         this.name = name;
         this.age = ChronoUnit.DAYS.between(birthDate, LocalDate.now());
         this.birthDate = birthDate;
         this.species = species;
         this.gender = gender;
+        this.imgUrl = imgUrl;
     }
 
 }

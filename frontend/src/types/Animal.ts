@@ -5,4 +5,5 @@ export type Animal = {
     age: number,
     species: string,
     gender: string,
+    imgUrl: string
 }

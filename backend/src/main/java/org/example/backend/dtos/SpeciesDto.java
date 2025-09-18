@@ -9,4 +9,5 @@ public class SpeciesDto {
 
     private String genus;
     private String imgUrl;
+    private String origin;
 }

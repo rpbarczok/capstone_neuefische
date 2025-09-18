@@ -27,7 +27,9 @@ class SpeciesControllerTest {
     @Test
     void getSpecies_shouldReturnListOfSpecies_whenCalled() throws Exception {
         //Given
-        Species species = new Species("phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species species = new Species("phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
         speciesRepo.save(species);
         //When & Then
         mockMvc.perform(MockMvcRequestBuilders.get("/api/species"))
@@ -36,7 +38,8 @@ class SpeciesControllerTest {
                         [
                           {
                             "genus": "phidippus regius",
-                            "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg"
+                            "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                            "origin": "Karibik, Florida"
                           }
                         ]
                         """
@@ -50,14 +53,16 @@ class SpeciesControllerTest {
                 .content("""
                     {
                       "genus": "phidippus regius",
-                      "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg"
+                      "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                      "origin": "Karibik, Florida"
                     }
                 """))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json("""
                     {
                       "genus": "phidippus regius",
-                      "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg"
+                      "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                      "origin": "Karibik, Florida"
                     }
                 """))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNotEmpty());
@@ -66,7 +71,9 @@ class SpeciesControllerTest {
     @Test
     void getSpeciesById_shouldReturnsSpecies_WhenSpeciesExists() throws Exception {
         //Given
-        Species species = new Species("phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species species = new Species("phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
         speciesRepo.save(species);
         //When & Then
         mockMvc.perform(MockMvcRequestBuilders.get("/api/species/1"))
@@ -75,7 +82,8 @@ class SpeciesControllerTest {
                           {
                             "id": 1,
                             "genus": "phidippus regius",
-                            "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg"
+                            "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                            "origin": "Karibik, Florida"
                           }
                         """
                 ));
@@ -91,7 +99,9 @@ class SpeciesControllerTest {
     @Test
     void deleteSpeciesById_shouldReturnNotContent_WhenSuccess() throws Exception {
         //Given
-        Species species = new Species("phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species species = new Species("phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
         speciesRepo.save(species);
 
         //When & Then
@@ -109,7 +119,9 @@ class SpeciesControllerTest {
     @Test
     void updateSpeciesById_shouldReturnUpdatedSpecies_whenCalledWithValidDateAndOnExistingSpecies() throws Exception {
         // given
-        Species species = new Species("phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species species = new Species("phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
         speciesRepo.save(species);
 
         //when & then
@@ -119,7 +131,8 @@ class SpeciesControllerTest {
                             {
                               "id": 1,
                               "genus": "phidippus ardens",
-                              "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg"
+                              "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                               "origin": "Karibik, Florida"
                              }
                     """))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -127,7 +140,8 @@ class SpeciesControllerTest {
                         {
                             "id": 1,
                             "genus": "phidippus ardens",
-                            "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg"
+                            "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                            "origin": "Karibik, Florida"
                         }
                         """));
     }
@@ -135,7 +149,9 @@ class SpeciesControllerTest {
     @Test
     void updateSpeciesById_shouldReturnBadRequest_whenIdFromInstanceAndFromURIDontMatch() throws Exception {
         // given
-        Species species = new Species("phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species species = new Species("phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
         speciesRepo.save(species);
 
         //when & then
@@ -145,7 +161,8 @@ class SpeciesControllerTest {
                             {
                               "id": 2,
                               "genus": "phidippus ardens",
-                              "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg"
+                              "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg",
+                              "origin": "Mexiko"
                              }
                     """))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
@@ -161,7 +178,8 @@ class SpeciesControllerTest {
                             {
                               "id": 1,
                               "genus": "phidippus ardens",
-                              "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg"
+                              "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg",
+                              "origin": "Mexiko"
                              }
                     """))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());

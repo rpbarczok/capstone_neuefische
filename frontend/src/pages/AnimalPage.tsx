@@ -11,10 +11,11 @@ type AnimalPageProps = {
     animalList: Animal[],
     addAnimal: (animal: AnimalCreation) => void,
     speciesList: Species[],
+    updateAnimal: (animal: Animal) => void
     deleteAnimal: (animal: Animal) => void
 }
 
-export default function AnimalPage({animalList, addAnimal, deleteAnimal, speciesList}: AnimalPageProps) {
+export default function AnimalPage({animalList, addAnimal, updateAnimal, deleteAnimal, speciesList}: AnimalPageProps) {
     const [show, setShow] = useState<boolean>(false)
 
 
@@ -34,7 +35,11 @@ export default function AnimalPage({animalList, addAnimal, deleteAnimal, species
                 {animalList.length === 0
                     ? <p>Keine Tiere eingetragen</p>
                     :
-                    animalList.map(animal => <Col xs={2}><AnimalCard animal={animal} deleteAnimal={deleteAnimal}/></Col>)
+                    animalList.map(animal => <Col xs={2}><AnimalCard
+                        animal={animal}
+                        updateAnimal={updateAnimal}
+                        deleteAnimal={deleteAnimal}
+                        speciesList={speciesList}/></Col>)
                 }
             </Row>
 

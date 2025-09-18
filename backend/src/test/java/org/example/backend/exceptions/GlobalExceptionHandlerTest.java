@@ -48,4 +48,18 @@ class GlobalExceptionHandlerTest {
         String result = handler.handleDeletionFailedException(ex);
         assertEquals("Deletion of animal with id 1 failed: animal with id 1 not found", result);
     }
+
+    @Test
+    void handleImATeapotException_returnsMessage() {
+        ImATeapotException ex = new ImATeapotException("coffee");
+        String result = handler.handleImATeapotException(ex);
+        assertEquals("I am a teapot,I can't make coffee!", result);
+    }
+
+    @Test
+    void handleTeaNotFoundException_returnsMessage() {
+        TeaNotFoundException ex = new TeaNotFoundException();
+        String result = handler.handleTeaNotFoundException(ex);
+        assertEquals("O dear, I haven't found any tea, unfortunately I ran out. Sorry.", result);
+    }
 }

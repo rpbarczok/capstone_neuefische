@@ -20,14 +20,17 @@ public class Species {
 
     private String imgUrl;
 
-    public Species(String genus, String imgUrl) {
+    private String origin;
+    public Species(String genus, String imgUrl, String origin) {
         this.genus=genus;
         this.imgUrl=imgUrl;
+        this.origin=origin;
     }
 
-    public Species(Integer id, String genus, String imgUrl) {
+    public Species(Integer id, String genus, String imgUrl, String origin) {
         this.genus=genus;
         this.imgUrl=imgUrl;
+        this.origin=origin;
         this.Id=id;
     }
 

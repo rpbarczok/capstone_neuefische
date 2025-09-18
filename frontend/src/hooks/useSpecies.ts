@@ -7,7 +7,7 @@ import axios from "axios";
 import type {SpeciesCreation} from "../types/SpeciesCreation.ts";
 
 export default function useSpecies(addNotes: (note: Note)=> void)
-    : [Species[], (species: SpeciesCreation) => void, (species: Species) => void]
+    : [Species[], (species: SpeciesCreation) => void, (species: Species) => void, (species: Species) => void]
 {
     const [speciesList, setSpeciesList] = useState<Species[]>([])
     const {setIsLoading } = useContextThrowUndefined<{ isLoading: boolean, setIsLoading: (isLoading: boolean) => void }> (LoadingContext)
@@ -36,13 +36,28 @@ export default function useSpecies(addNotes: (note: Note)=> void)
                 setIsLoading(false)
                 void getSpecies()
                 addNotes({message: response.data.genus + " wurde erfolgreich angelegt.", variant: "success"})
+            } else {
+                setIsLoading(false)
+                addNotes({message: " Es ist nicht gelungen, eine neue Spezies anzulegen.", variant: "success"})
             }
         } catch (e) {
             setIsLoading(false)
                 addNotes({message: "Es ist nicht gelungen, eine neues Spezies anzulegen: " + e, variant: "danger"})
         }
     }
-//    const updateSpecies (species: Species): Species {}
+
+    async function updateSpecies(species: Species) {
+        setIsLoading(true)
+        try {
+            const response = await axios.put("api/species/"+species.id, species)
+            setIsLoading(false)
+            void getSpecies()
+            addNotes({message: "Die Spezies " + response.data.genus + " wurde erfolgreich upgedated.", variant: "success"})
+        } catch (e) {
+            setIsLoading(false)
+            addNotes({message: "Es ist nicht gelungen, die Spezies anzulegen: " + e, variant: "danger"})
+        }
+    }
 
     async function deleteSpecies (species: Species) {
         setIsLoading(true)
@@ -57,5 +72,5 @@ export default function useSpecies(addNotes: (note: Note)=> void)
         }
 }
 
-    return [speciesList, addSpecies, deleteSpecies];
+    return [speciesList, addSpecies, updateSpecies, deleteSpecies];
 }

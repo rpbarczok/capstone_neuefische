@@ -3,16 +3,17 @@ import type {Species} from "../types/Species.ts";
 import SpeciesCard from "../components/species/SpeciesCard.tsx";
 import {Col, Row} from "react-bootstrap";
 import {useState} from "react";
-import SpeciesAddForm from "../components/species/SpeciesAddForm.tsx";
+import SpeciesModalAdd from "../components/species/SpeciesModalAdd.tsx";
 import type {SpeciesCreation} from "../types/SpeciesCreation.ts";
 
 type SpeciesPageProps = {
     speciesList: Species[],
     addSpecies: (species: SpeciesCreation) => void,
+    updateSpecies: (species: Species) => void,
     deleteSpecies: (species: Species) => void
 }
 
-export default function SpeciesPage({speciesList, addSpecies, deleteSpecies}: SpeciesPageProps) {
+export default function SpeciesPage({speciesList, addSpecies, updateSpecies, deleteSpecies}: SpeciesPageProps) {
     const [show, setShow] = useState<boolean>(false)
 
     return (
@@ -21,7 +22,7 @@ export default function SpeciesPage({speciesList, addSpecies, deleteSpecies}: Sp
                 title="Spezies"
                 page="species"
                 setShow={setShow}/>
-            <SpeciesAddForm
+            <SpeciesModalAdd
                 show={show}
                 setShow={setShow}
                 addSpecies={addSpecies}
@@ -30,7 +31,11 @@ export default function SpeciesPage({speciesList, addSpecies, deleteSpecies}: Sp
                 {speciesList.length === 0
                     ? <p>Keine Tiere eingetragen</p>
                     :
-                    speciesList.map(species => <Col xs={2}><SpeciesCard species={species} deleteSpecies={deleteSpecies}/></Col>)
+                    speciesList.map(species => <Col xs={2}>
+                        <SpeciesCard species={species}
+                                     deleteSpecies={deleteSpecies}
+                                     updateSpecies={updateSpecies}
+                        /></Col>)
                 }
             </Row>
         </>

@@ -14,5 +14,5 @@ public class AnimalIdOutputDto {
     private Long age;
     private String species;
     private String gender;
-
+    private String imgUrl;
 }
