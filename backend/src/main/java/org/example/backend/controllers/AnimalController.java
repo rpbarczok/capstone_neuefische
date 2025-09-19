@@ -1,5 +1,6 @@
 package org.example.backend.controllers;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.example.backend.dtos.AnimalDto;
 import org.example.backend.dtos.AnimalIdInputDto;
 import org.example.backend.dtos.AnimalIdOutputDto;
@@ -40,7 +41,8 @@ public class AnimalController {
     }
 
     @GetMapping
-    public List<AnimalIdOutputDto> getAllAnimals(){
+    public List<AnimalIdOutputDto> getAllAnimals(HttpServletResponse response){
+        response.setHeader("X-Clacks-Overhead", "GNU Terry Pratchett");
         List<Animal> animals = animalService.getAllAnimals();
         ArrayList<AnimalIdOutputDto> animalIdOutputDtos = new ArrayList<>();
         for(Animal animal : animals){
@@ -50,19 +52,22 @@ public class AnimalController {
     }
 
     @PostMapping
-    public AnimalIdOutputDto addAnimal(@RequestBody AnimalDto animalDto){
+    public AnimalIdOutputDto addAnimal(@RequestBody AnimalDto animalDto, HttpServletResponse response){
+        response.setHeader("X-Clacks-Overhead", "GNU Terry Pratchett");
         Animal animal = animalService.addOneAnimal(animalDto);
         return transformAnimalToIdDto(animal);
     }
 
     @GetMapping("/{id}")
-    public AnimalIdOutputDto getAnimalById(@PathVariable int id){
+    public AnimalIdOutputDto getAnimalById(@PathVariable int id, HttpServletResponse response){
+        response.setHeader("X-Clacks-Overhead", "GNU Terry Pratchett");
         Animal animal = animalService.getAnimalById(id);
         return transformAnimalToIdDto(animal);
     }
 
     @PutMapping("/{id}")
-    public AnimalIdOutputDto updateAnimal(@PathVariable int id, @RequestBody AnimalIdInputDto animalIdInputDto){
+    public AnimalIdOutputDto updateAnimal(@PathVariable int id, @RequestBody AnimalIdInputDto animalIdInputDto, HttpServletResponse response){
+        response.setHeader("X-Clacks-Overhead", "GNU Terry Pratchett");
         if (id == animalIdInputDto.getId()){
             Animal animal = animalService.updateAnimal(animalIdInputDto);
             return transformAnimalToIdDto(animal);
@@ -73,7 +78,8 @@ public class AnimalController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAnimal(@PathVariable int id){
+    public void deleteAnimal(@PathVariable int id, HttpServletResponse response){
+        response.setHeader("X-Clacks-Overhead", "GNU Terry Pratchett");
         animalService.deleteAnimal(id);
     }
 }

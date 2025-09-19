@@ -1,5 +1,6 @@
 package org.example.backend.controllers;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.example.backend.exceptions.BadRequestException;
 import org.example.backend.models.Species;
 import org.example.backend.services.SpeciesService;
@@ -19,20 +20,25 @@ public class SpeciesController {
     }
 
     @GetMapping
-    public List<Species> getSpecies() {
+    public List<Species> getSpecies(HttpServletResponse response) {
+        response.setHeader("X-Clacks-Overhead", "GNU Terry Pratchett");
         return speciesService.getAllSpecies();
     }
 
     @PostMapping
-    public Species addSpecies(@RequestBody Species species) {
+    public Species addSpecies(@RequestBody Species species, HttpServletResponse response) {
+        response.setHeader("X-Clacks-Overhead", "GNU Terry Pratchett");
         return speciesService.addOneSpecies(species);
     }
 
     @GetMapping("/{id}")
-    public Species getSpeciesById(@PathVariable int id) {return speciesService.getSpeciesById(id);}
+    public Species getSpeciesById(@PathVariable int id, HttpServletResponse response) {
+        response.setHeader("X-Clacks-Overhead", "GNU Terry Pratchett");
+        return speciesService.getSpeciesById(id);}
 
     @PutMapping("/{id}")
-    public Species updateSpeciesById(@PathVariable int id, @RequestBody Species species) {
+    public Species updateSpeciesById(@PathVariable int id, @RequestBody Species species, HttpServletResponse response) {
+        response.setHeader("X-Clacks-Overhead", "GNU Terry Pratchett");
         if (id == species.getId()) {
             return speciesService.updateSpecies(species);
         } else {
@@ -42,5 +48,7 @@ public class SpeciesController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteSpeciesById(@PathVariable int id) {speciesService.deleteSpecies(id);}
+    public void deleteSpeciesById(@PathVariable int id, HttpServletResponse response) {
+        response.setHeader("X-Clacks-Overhead", "GNU Terry Pratchett");
+        speciesService.deleteSpecies(id);}
 }

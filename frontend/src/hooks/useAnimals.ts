@@ -22,7 +22,7 @@ export default function useAnimals(addNotes: (note: Note)=> void)
     async function getAnimals() {
         setIsLoading(true)
         try {
-            const response = await axios.get("api/animals")
+            const response = await axios.get("api/animals", {headers: {"X-Clacks-Overhead": "GNU Terry Pratchett"}})
             setAnimalList(response.data)
             setIsLoading(false)
         } catch {
@@ -34,7 +34,7 @@ export default function useAnimals(addNotes: (note: Note)=> void)
     async function addAnimal(animal: AnimalCreation) {
         setIsLoading(true)
         try {
-            const response = await axios.post("api/animals", animal)
+            const response = await axios.post("api/animals", animal, {headers: {"X-Clacks-Overhead": "GNU Terry Pratchett"}})
             if (response.data !== null) {
                 setIsLoading(false)
                 void getAnimals()
@@ -49,20 +49,20 @@ export default function useAnimals(addNotes: (note: Note)=> void)
     async function updateAnimal (animal: Animal) {
         setIsLoading(true)
         try{
-            const response = await axios.put("api/animals/"+animal.id)
+            const response = await axios.put("api/animals/"+animal.id, animal,{headers: {"X-Clacks-Overhead": "GNU Terry Pratchett"}})
             setIsLoading(false)
             void getAnimals()
-            addNotes({message: response.data.name + " wurde refolgreich angelegt", variant: "success"})
+            addNotes({message: response.data.name + " wurde erfolgreich angelegt", variant: "success"})
         } catch (e) {
             setIsLoading(false)
-            addNotes({message: "Es ist icht gelungen, " + animal.name + " anzulegen: "+ e, variant: "warning"})
+            addNotes({message: "Es ist nicht gelungen, " + animal.name + " anzulegen: "+ e, variant: "warning"})
         }
     }
 
     async function deleteAnimal(animal: Animal) {
         setIsLoading(true)
         try {
-            await axios.delete("/api/animals/" + animal.id)
+            await axios.delete("/api/animals/" + animal.id, {headers: {"X-Clacks-Overhead": "GNU Terry Pratchett"}})
             setIsLoading(false)
             void getAnimals()
             addNotes({message: animal.name + " wurde erfolgreich gelöscht.", variant: "success"})
