@@ -9,8 +9,8 @@ type SpeciesAddFormProps = {
     addSpecies: (species: SpeciesCreation) => void
 }
 
-export default function SpeciesAddForm({show, setShow, addSpecies}: SpeciesAddFormProps) {
-    const emptySpeciesCreation={genus: "", imgUrl: ""}
+export default function SpeciesModalAdd({show, setShow, addSpecies}: SpeciesAddFormProps) {
+    const emptySpeciesCreation={genus: "", imgUrl: "", origin: ""}
     const [newSpecies, setNewSpecies] = useState<SpeciesCreation>(emptySpeciesCreation)
 
     function handleChangeGenus(value: string) {
@@ -33,6 +33,15 @@ export default function SpeciesAddForm({show, setShow, addSpecies}: SpeciesAddFo
         )
     }
 
+    function handleChangeOrigin(value: string) {
+
+        setNewSpecies(
+            {
+                ...newSpecies,
+                origin: value
+            }
+        )
+    }
     function submitNewSpecies () {
         addSpecies(newSpecies)
         setNewSpecies(emptySpeciesCreation)
@@ -42,7 +51,7 @@ export default function SpeciesAddForm({show, setShow, addSpecies}: SpeciesAddFo
     return (
         <Modal show={show} onHide={() => setShow(false)}>
             <Modal.Header closeButton>
-                <Modal.Title>Species hinzufügen</Modal.Title>
+                <Modal.Title>Spezies hinzufügen</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form>
@@ -51,6 +60,12 @@ export default function SpeciesAddForm({show, setShow, addSpecies}: SpeciesAddFo
                             <Form.Group controlId="speciesGenus">
                                 <Form.Label>Genus</Form.Label>
                                 <Form.Control onChange={(e) => handleChangeGenus(e.target.value) } type="text" />
+                            </Form.Group>
+                        </Col>
+                        <Col>
+                            <Form.Group controlId="speciesOrigin">
+                                <Form.Label>Herkunft</Form.Label>
+                                <Form.Control onChange={(e) => handleChangeOrigin(e.target.value) } type="text" />
                             </Form.Group>
                         </Col>
                     </Row>
@@ -65,11 +80,11 @@ export default function SpeciesAddForm({show, setShow, addSpecies}: SpeciesAddFo
                 </Form>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={() => setShow(false)}>
-                    Abbrechen
-                </Button>
                 <Button variant="primary" onClick={() => submitNewSpecies()}>
                     Abspeichern
+                </Button>
+                <Button variant="secondary" onClick={() => setShow(false)}>
+                    Abbrechen
                 </Button>
             </Modal.Footer>
         </Modal>

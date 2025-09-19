@@ -45,7 +45,13 @@ class AnimalServiceTest {
     @Test
     void getAllAnimals_returnsAnimalsList_WhenAnimalListIsNotEmpty() {
         // given
-        Animal animal = new Animal("Leonie", LocalDate.of(2025, 5, 8),  new Species("Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg"), Gender.FEMALE);
+        Animal animal = new Animal("Leonie",
+                LocalDate.of(2025, 5, 8),
+                new Species("Phidippus regius",
+                        "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                        "Karibik, Florida"),
+                Gender.FEMALE,
+                "");
         ArrayList<Animal> animalList = new ArrayList<>();
         animalList.add(animal);
 
@@ -67,15 +73,18 @@ class AnimalServiceTest {
         // given
         LocalDate date = LocalDate.of(2025, 5, 8);
 
-        AnimalDto animalInput = new AnimalDto("Leonie", date.toString(),  "Phidippus regius", "weiblich");
+        AnimalDto animalInput = new AnimalDto("Leonie", date.toString(),  "Phidippus regius", "weiblich", "");
 
         AnimalRepository animalRepo = mock(AnimalRepository.class);
         SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
 
-        Species speciesInput = new  Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species speciesInput = new  Species(1,
+                "Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
 
-        Animal animalWithoutId = new Animal("Leonie", date,  speciesInput, Gender.FEMALE);
-        Animal animalWithId = new Animal(1, "Leonie", date,  speciesInput, Gender.FEMALE);
+        Animal animalWithoutId = new Animal("Leonie", date,  speciesInput, Gender.FEMALE, "");
+        Animal animalWithId = new Animal(1, "Leonie", date,  speciesInput, Gender.FEMALE, "");
         AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
         when(speciesRepo.getSpeciesByGenus("Phidippus regius")).thenReturn(speciesInput);
@@ -94,7 +103,7 @@ class AnimalServiceTest {
         // given
         LocalDate date = LocalDate.of(2025, 5, 8);
 
-        AnimalDto animalInput = new AnimalDto("Leonie", date.toString(),  "Phidippus regius", "weiblich");
+        AnimalDto animalInput = new AnimalDto("Leonie", date.toString(),  "Phidippus regius", "weiblich","");
 
         AnimalRepository animalRepo = mock(AnimalRepository.class);
         SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
@@ -110,12 +119,15 @@ class AnimalServiceTest {
     void addOneAnimal_shouldThrowException_WhenCalledWithNonParsableStringDate() {
         // given
 
-        AnimalDto animalInput = new AnimalDto("Leonie", "asdf",  "Phidippus regius", "weiblich");
+        AnimalDto animalInput = new AnimalDto("Leonie", "asdf",  "Phidippus regius", "weiblich", "");
 
         AnimalRepository animalRepo = mock(AnimalRepository.class);
         SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
 
-        Species speciesInput = new  Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species speciesInput = new  Species(1,
+                "Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
 
         AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
@@ -131,14 +143,17 @@ class AnimalServiceTest {
         // given
         LocalDate date = LocalDate.of(2025, 5, 8);
 
-        AnimalDto animalInput = new AnimalDto("Leonie", date.toString(),  "Phidippus regius", "weiblich");
+        AnimalDto animalInput = new AnimalDto("Leonie", date.toString(),  "Phidippus regius", "weiblich", "");
 
         AnimalRepository animalRepo = mock(AnimalRepository.class);
         SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
 
-        Species speciesInput = new  Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species speciesInput = new  Species(1,
+                "Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
 
-        Animal animalWithoutId = new Animal("Leonie", date,  speciesInput, Gender.FEMALE);
+        Animal animalWithoutId = new Animal("Leonie", date,  speciesInput, Gender.FEMALE, "");
         AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
         when(speciesRepo.getSpeciesByGenus("Phidippus regius")).thenReturn(speciesInput);
@@ -154,15 +169,18 @@ class AnimalServiceTest {
         // given
         LocalDate date = LocalDate.of(2025, 5, 8);
 
-        AnimalDto animalInput = new AnimalDto("Leonie", date.toString(),  "Phidippus regius", "weiblich");
+        AnimalDto animalInput = new AnimalDto("Leonie", date.toString(),  "Phidippus regius", "weiblich", "");
 
         AnimalRepository animalRepo = mock(AnimalRepository.class);
         SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
 
-        Species speciesInput = new  Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species speciesInput = new  Species(1,
+                "Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
 
-        Animal animalWithoutId = new Animal("Leonie", date,  speciesInput, Gender.FEMALE);
-        Animal animalWithId = new Animal(1, "Leonie", date,  speciesInput, Gender.FEMALE);
+        Animal animalWithoutId = new Animal("Leonie", date,  speciesInput, Gender.FEMALE, "");
+        Animal animalWithId = new Animal(1, "Leonie", date,  speciesInput, Gender.FEMALE, "");
         AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
         when(speciesRepo.getSpeciesByGenus("Phidippus regius")).thenReturn(speciesInput);
@@ -180,12 +198,16 @@ class AnimalServiceTest {
         SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
         AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
-        Species species = new Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species species = new Species(1,
+                "Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
         Animal animal = new Animal(1,
                 "Leonie",
                 LocalDate.of(2025,5,8),
                 species,
-                Gender.FEMALE);
+                Gender.FEMALE,
+                "");
 
 
         when(animalRepo.findById(1)).thenReturn(Optional.of(animal));
@@ -211,15 +233,22 @@ class AnimalServiceTest {
         SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
         AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
-        Species oldSpecies = new Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
-        Species newSpecies = new Species(2, "Phidippus ardens", "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg");
+        Species oldSpecies = new Species(1,
+                "Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
+        Species newSpecies = new Species(2,
+                "Phidippus ardens",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg",
+                "Mexiko");
 
         Animal oldAnimal = new Animal(
                 1,
                 "Leonie",
                 LocalDate.of(2025, 5,8),
                 oldSpecies,
-                Gender.FEMALE
+                Gender.FEMALE,
+                ""
                 );
 
         AnimalIdInputDto newAnimalDto = new AnimalIdInputDto(
@@ -227,7 +256,8 @@ class AnimalServiceTest {
                 "Leon",
                 "2025-05-08",
                 "Phidippus ardens",
-                "männlich"
+                "männlich",
+                ""
         );
 
         Animal newAnimal = new Animal(
@@ -235,7 +265,8 @@ class AnimalServiceTest {
                 "Leon",
                 LocalDate.of(2025,5,8),
                 newSpecies,
-                Gender.MALE
+                Gender.MALE,
+                ""
         );
 
         when(animalRepo.findById(1)).thenReturn(Optional.of(oldAnimal));
@@ -260,7 +291,8 @@ class AnimalServiceTest {
                 "Leon",
                 "2025-05-08",
                 "Phidippus ardens",
-                "männlich"
+                "männlich",
+                ""
         );
 
         when(animalRepo.findById(1)).thenReturn(Optional.empty());
@@ -275,22 +307,27 @@ class AnimalServiceTest {
         SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
         AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
-        Species oldSpecies = new Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species oldSpecies = new Species(1,
+                "Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
 
         Animal oldAnimal = new Animal(
                 1,
                 "Leonie",
                 LocalDate.of(2025, 5,8),
                 oldSpecies,
-                Gender.FEMALE
+                Gender.FEMALE,
+                ""
         );
 
         AnimalIdInputDto newAnimalDto = new AnimalIdInputDto(
                 1,
                 "Leon",
-                "asdg",
+                "nichtFormatierbar",
                 "Phidippus ardens",
-                "männlich"
+                "männlich",
+                ""
         );
 
         when(animalRepo.findById(1)).thenReturn(Optional.of(oldAnimal));
@@ -305,15 +342,22 @@ class AnimalServiceTest {
         SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
         AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
-        Species oldSpecies = new Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
-        Species newSpecies = new Species(2, "Phidippus ardens", "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg");
+        Species oldSpecies = new Species(1,
+                "Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
+        Species newSpecies = new Species(2,
+                "Phidippus ardens",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg",
+                "Mexiko");
 
         Animal oldAnimal = new Animal(
                 1,
                 "Leonie",
                 LocalDate.of(2025, 5,8),
                 oldSpecies,
-                Gender.FEMALE
+                Gender.FEMALE,
+                ""
         );
 
         AnimalIdInputDto newAnimalDto = new AnimalIdInputDto(
@@ -321,7 +365,8 @@ class AnimalServiceTest {
                 "Leon",
                 "2025-05-08",
                 "Phidippus ardens",
-                "männlich"
+                "männlich",
+                ""
         );
 
 
@@ -339,15 +384,22 @@ class AnimalServiceTest {
         SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
         AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
-        Species oldSpecies = new Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
-        Species newSpecies = new Species(2, "Phidippus ardens", "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg");
+        Species oldSpecies = new Species(1,
+                "Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
+        Species newSpecies = new Species(2,
+                "Phidippus ardens",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg",
+                "Mexiko");
 
         Animal oldAnimal = new Animal(
                 1,
                 "Leonie",
                 LocalDate.of(2025, 5,8),
                 oldSpecies,
-                Gender.FEMALE
+                Gender.FEMALE,
+                ""
         );
 
         AnimalIdInputDto newAnimalDto = new AnimalIdInputDto(
@@ -355,7 +407,8 @@ class AnimalServiceTest {
                 "Leon",
                 "2025-05-08",
                 "Phidippus ardens",
-                "männlich"
+                "männlich",
+                ""
         );
 
         Animal newAnimal = new Animal(
@@ -363,7 +416,8 @@ class AnimalServiceTest {
                 "Leon",
                 LocalDate.of(2025,5,8),
                 newSpecies,
-                Gender.MALE
+                Gender.MALE,
+                ""
         );
 
         when(animalRepo.findById(1)).thenReturn(Optional.of(oldAnimal));
@@ -381,14 +435,18 @@ class AnimalServiceTest {
          SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
          AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
-         Species species = new Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+         Species species = new Species(1,
+                 "Phidippus regius",
+                 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                 "Karibik, Florida");
 
          Animal animal = new Animal(
                  1,
                  "Leonie",
                  LocalDate.of(2025, 5,8),
                  species,
-                 Gender.FEMALE
+                 Gender.FEMALE,
+                 ""
          );
 
          when(animalRepo.findById(1)).thenReturn(Optional.of(animal), Optional.empty());
@@ -419,14 +477,18 @@ class AnimalServiceTest {
         SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
         AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
-        Species species = new Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species species = new Species(1,
+                "Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
 
         Animal animal = new Animal(
                 1,
                 "Leonie",
                 LocalDate.of(2025, 5,8),
                 species,
-                Gender.FEMALE
+                Gender.FEMALE,
+                ""
         );
 
         when(animalRepo.findById(1)).thenReturn(Optional.of(animal));
@@ -444,14 +506,18 @@ class AnimalServiceTest {
         SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
         AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
-        Species species = new Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species species = new Species(1,
+                "Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
 
         Animal animal = new Animal(
                 1,
                 "Leonie",
                 LocalDate.of(2025, 5,8),
                 species,
-                Gender.FEMALE
+                Gender.FEMALE,
+                ""
         );
 
         when(animalRepo.findById(1)).thenReturn(Optional.of(animal));

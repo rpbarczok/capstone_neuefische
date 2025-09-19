@@ -44,4 +44,15 @@ public class GlobalExceptionHandler {
         return e.getMessage();
     }
 
+    @ExceptionHandler(ImATeapotException.class)
+    @ResponseStatus(HttpStatus.I_AM_A_TEAPOT)
+    public String handleImATeapotException(ImATeapotException e) {
+        return e.getMessage();
+    }
+
+    @ExceptionHandler(TeaNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleTeaNotFoundException(TeaNotFoundException e) {
+        return e.getMessage();
+    }
 }

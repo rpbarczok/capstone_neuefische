@@ -6,6 +6,7 @@ import org.example.backend.dtos.AnimalIdOutputDto;
 import org.example.backend.exceptions.BadRequestException;
 import org.example.backend.models.Animal;
 import org.example.backend.models.Gender;
+import org.example.backend.models.Species;
 import org.example.backend.services.AnimalService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("api/animals")
@@ -25,12 +27,15 @@ public class AnimalController {
     }
 
     private AnimalIdOutputDto transformAnimalToIdDto(Animal animal){
+        String animalImage = animal.getImgUrl();
+        if (Objects.equals(animalImage, "")) {animalImage = animal.getSpecies().getImgUrl();}
         return new AnimalIdOutputDto(animal.getId(),
                 animal.getName(),
                 animal.getBirthDate().toString(),
                 ChronoUnit.DAYS.between(animal.getBirthDate(), LocalDate.now()),
                 animal.getSpecies().getGenus(),
-                Gender.getGenderStringFromGender(String.valueOf(animal.getGender()))
+                Gender.getGenderStringFromGender(String.valueOf(animal.getGender())),
+                animalImage
         );
     }
 

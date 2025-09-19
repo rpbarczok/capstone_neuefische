@@ -3,4 +3,5 @@ export type AnimalCreation = {
     birthDate: string,
     species: string,
     gender: string,
+    imgUrl: string
 }

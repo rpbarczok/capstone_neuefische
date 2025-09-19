@@ -37,8 +37,14 @@ class SpeciesServiceTest {
         //given
 
         List<Species> speciesList = new ArrayList<>();
-        speciesList.add(new Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg"));
-        speciesList.add(new Species(2, "Harpactira pulchripes", "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Harpactira_pulchripes01.jpg/330px-Harpactira_pulchripes01.jpg"));
+        speciesList.add(new Species(1,
+                "Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida"));
+        speciesList.add(new Species(2,
+                "Harpactira pulchripes",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Harpactira_pulchripes01.jpg/330px-Harpactira_pulchripes01.jpg",
+                "Südafrika"));
         SpeciesRepository repo = mock(SpeciesRepository.class);
         SpeciesService service = new SpeciesService(repo);
         when(repo.findAll()).thenReturn(speciesList);
@@ -51,8 +57,13 @@ class SpeciesServiceTest {
     @Test
     void addOneSpecies_shouldReturnSpecies_WhenCalledWithValidData() {
         // given
-        Species species = new Species("Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
-        Species speciesWithId = new Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species species = new Species("Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
+        Species speciesWithId = new Species(1,
+                "Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
         SpeciesRepository repo = mock(SpeciesRepository.class);
         SpeciesService service = new SpeciesService(repo);
 
@@ -70,7 +81,9 @@ class SpeciesServiceTest {
     @Test
     void addOneSpecies_shouldThrowException_saveSpeciesFailed () {
         // given
-        Species species = new Species("Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species species = new Species("Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
         SpeciesRepository repo = mock(SpeciesRepository.class);
         SpeciesService service = new SpeciesService(repo);
         when(repo.save(species)).thenReturn(null);
@@ -82,8 +95,13 @@ class SpeciesServiceTest {
     @Test
     void addOneSpecies_shouldThrowException_savedSpeciesWasNotFound () {
         // given
-        Species species = new Species("Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
-        Species speciesWithId = new Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species species = new Species("Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
+        Species speciesWithId = new Species(1,
+                "Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
         SpeciesRepository repo = mock(SpeciesRepository.class);
         SpeciesService service = new SpeciesService(repo);
         when(repo.save(species)).thenReturn(speciesWithId);
@@ -96,8 +114,14 @@ class SpeciesServiceTest {
     @Test
     void updateSpecies_shouldReturnUpdatedSpecies_whenCalledWithValidData() {
         // given
-         Species speciesWithId = new Species(1, "Phidippus ardens", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
-        Species speciesWithIdNew = new Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+         Species speciesWithId = new Species(1,
+                 "Phidippus ardens",
+                 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                 "Karibik, Florida");
+        Species speciesWithIdNew = new Species(1,
+                "Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
 
         SpeciesRepository repo = mock(SpeciesRepository.class);
         SpeciesService service = new SpeciesService(repo);
@@ -111,7 +135,10 @@ class SpeciesServiceTest {
     @Test
     void updateSpecies_shouldThrowNotFoundException_whenAttemptToUpdateNotExistingSpecies() {
         // given
-        Species speciesWithIdNew = new Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species speciesWithIdNew = new Species(1,
+                "Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
         SpeciesRepository repo = mock(SpeciesRepository.class);
         SpeciesService service = new SpeciesService(repo);
         when(repo.save(speciesWithIdNew)).thenReturn(speciesWithIdNew);
@@ -124,8 +151,14 @@ class SpeciesServiceTest {
     @Test
     void updateSpecies_shouldThrowUpdateFailedException_whenAttemptToUpdateNotExistingSpecies() {
         // given
-        Species speciesWithIdOld = new Species(1, "Phidippus ardens", "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg");
-        Species speciesWithIdNew = new Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species speciesWithIdOld = new Species(1,
+                "Phidippus ardens",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg",
+                "Mexiko");
+        Species speciesWithIdNew = new Species(1,
+                "Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
         SpeciesRepository repo = mock(SpeciesRepository.class);
         SpeciesService service = new SpeciesService(repo);
         when(repo.findById(1)).thenReturn(Optional.of(speciesWithIdOld));
@@ -140,7 +173,10 @@ class SpeciesServiceTest {
         SpeciesRepository repo = mock(SpeciesRepository.class);
         SpeciesService service = new SpeciesService(repo);
 
-        Species species = new Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species species = new Species(1,
+                "Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
 
         when(repo.findById(1)).thenReturn(Optional.of(species), Optional.empty());
 
@@ -166,8 +202,10 @@ class SpeciesServiceTest {
         SpeciesRepository repo = mock(SpeciesRepository.class);
         SpeciesService service = new SpeciesService(repo);
 
-        Species species = new Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
-
+        Species species = new Species(1,
+                "Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
         when(repo.findById(1)).thenReturn(Optional.of(species));
         doThrow(new RuntimeException("something went wrong"))
                 .when(repo)
@@ -181,7 +219,10 @@ class SpeciesServiceTest {
         SpeciesRepository repo = mock(SpeciesRepository.class);
         SpeciesService service = new SpeciesService(repo);
 
-        Species species = new Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species species = new Species(1,
+                "Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
 
         when(repo.findById(1)).thenReturn(Optional.of(species));
 
@@ -194,7 +235,10 @@ class SpeciesServiceTest {
         SpeciesRepository repo = mock(SpeciesRepository.class);
         SpeciesService service = new SpeciesService(repo);
 
-        Species species = new Species(1, "Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species species = new Species(1,
+                "Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
 
         when(repo.findById(1)).thenReturn(Optional.of(species));
 

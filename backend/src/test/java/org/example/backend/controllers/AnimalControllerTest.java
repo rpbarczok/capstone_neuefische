@@ -35,12 +35,13 @@ class AnimalControllerTest {
     @Test
     void getAllAnimals_shouldReturnListOfAnimals_whenCalled() throws Exception {
         // Given
-        Species species = new Species("Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species species = new Species("Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
         Species newSpecies = speciesRepo.save(species);
         LocalDate birthDate = LocalDate.of(2025, 5,8);
-        Animal animal = new Animal("Leonie", birthDate, newSpecies, Gender.FEMALE);
+        Animal animal = new Animal("Leonie", birthDate, newSpecies, Gender.FEMALE, "");
         Animal result = animalRepo.save(animal);
-        System.out.println(result);
         // When & Then
         mockMvc.perform(MockMvcRequestBuilders.get("/api/animals"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -51,7 +52,8 @@ class AnimalControllerTest {
                             "name": "Leonie",
                             "species" : "Phidippus regius",
                             "birthDate": "2025-05-08",
-                            "gender": "weiblich"
+                            "gender": "weiblich",
+                            "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg\"
                           }
                         ]
                         """
@@ -61,7 +63,9 @@ class AnimalControllerTest {
     @Test
     void addAnimal_shouldReturnCreatedAnimal_WhenCalledWithValidData() throws Exception {
         // Given
-        Species species = new Species("Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species species = new Species("Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
         speciesRepo.save(species);
         //When & Then
         mockMvc.perform(MockMvcRequestBuilders.post("/api/animals")
@@ -71,7 +75,8 @@ class AnimalControllerTest {
                           "name": "Leonie",
                           "species": "Phidippus regius",
                           "birthDate": "2024-05-08",
-                          "gender": "weiblich"
+                          "gender": "weiblich",
+                          "imgUrl": ""
                         }
                 """))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -79,7 +84,8 @@ class AnimalControllerTest {
                             {
                             "name": "Leonie",
                             "species": "Phidippus regius",
-                            "gender": "weiblich"
+                            "gender": "weiblich",
+                            "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg"
                             }
                         """
                 ))
@@ -89,7 +95,9 @@ class AnimalControllerTest {
     @Test
     void addAnimal_shouldReturn400_WhenDateIsNotParsable() throws Exception {
         // Given
-        Species species = new Species("Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species species = new Species("Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
         speciesRepo.save(species);
         //When & Then
         mockMvc.perform(MockMvcRequestBuilders.post("/api/animals")
@@ -98,8 +106,9 @@ class AnimalControllerTest {
                         {
                           "name": "Leonie",
                           "species": "Phidippus regius",
-                          "birthDate": "2asdgjlöafgj",
-                          "gender": "weiblich"
+                          "birthDate": "schlechtes",
+                          "gender": "weiblich",
+                          "imgUrl": ""
                         }
                 """))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
@@ -115,7 +124,8 @@ class AnimalControllerTest {
                           "name": "Leonie",
                           "species": "Phidippus regius",
                           "birthDate": "2024-05-08",
-                          "gender": "weiblich"
+                          "gender": "weiblich",
+                          "imgUrl": ""
                         }
                 """))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
@@ -124,13 +134,16 @@ class AnimalControllerTest {
     @Test
     void getAnimalById_shouldReturnAnimal_WhenAnimalExists() throws Exception {
         // Given
-        Species species = new Species("Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species species = new Species("Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
         speciesRepo.save(species);
         Animal animal = new Animal(
                 "Leonie",
                 LocalDate.of(2025,5,8),
                 species,
-                Gender.FEMALE
+                Gender.FEMALE,
+                ""
                 );
         animalRepo.save(animal);
 
@@ -142,7 +155,38 @@ class AnimalControllerTest {
                   "name": "Leonie",
                   "species": "Phidippus regius",
                   "birthDate": "2025-05-08",
-                  "gender": "weiblich"
+                  "gender": "weiblich",
+                  "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg"
+                  }
+                """));
+    }
+
+    @Test
+    void getAnimalById_shouldReturnAnimalWithOwnUrl_WhenAnimalExistsWithOwnUrl() throws Exception {
+        // Given
+        Species species = new Species("Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
+        speciesRepo.save(species);
+        Animal animal = new Animal(
+                "Leonie",
+                LocalDate.of(2025,5,8),
+                species,
+                Gender.FEMALE,
+                " https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg"
+        );
+        animalRepo.save(animal);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/animals/1"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json("""
+                  {
+                  "id": 1,
+                  "name": "Leonie",
+                  "species": "Phidippus regius",
+                  "birthDate": "2025-05-08",
+                  "gender": "weiblich",
+                  "imgUrl": " https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg"
                   }
                 """));
     }
@@ -157,15 +201,20 @@ class AnimalControllerTest {
     @Test
     void updateAnimalById_shouldReturnUpdatedAnimal_whenCalledWithValidDataAndOnExistingAnimal() throws Exception {
         // Given
-        Species species1 = new Species("Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species species1 = new Species("Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
         speciesRepo.save(species1);
-        Species species2 = new Species("Phidippus ardens", "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg");
+        Species species2 = new Species("Phidippus ardens",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg",
+                "Mexiko");
         speciesRepo.save(species2);
         Animal animal = new Animal(
                 "Leonie",
                 LocalDate.of(2025,5,8),
                 species1,
-                Gender.FEMALE
+                Gender.FEMALE,
+                ""
         );
         animalRepo.save(animal);
 
@@ -178,7 +227,8 @@ class AnimalControllerTest {
                   "name": "Leonie",
                   "species": "Phidippus ardens",
                   "birthDate": "2025-05-08",
-                  "gender": "weiblich"
+                  "gender": "weiblich",
+                  "imgUrl": ""
                   }
                 """))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -188,7 +238,8 @@ class AnimalControllerTest {
                       "name": "Leonie",
                       "species": "Phidippus ardens",
                       "birthDate": "2025-05-08",
-                      "gender": "weiblich"
+                      "gender": "weiblich",
+                      "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg"
                   }
                 """));
     }
@@ -196,14 +247,19 @@ class AnimalControllerTest {
      @Test
      void updateAnimalById_shouldReturnBadRequest_whenIdFromInstanceAndFromURIDontMatch() throws Exception {
          // Given
-         Species species1 = new Species("Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+         Species species1 = new Species("Phidippus regius",
+                 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                 "Karibik, Florida");
          speciesRepo.save(species1);
-         Species species2 = new Species("Phidippus ardens", "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg");
+         Species species2 = new Species("Phidippus ardens",
+                 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg",
+                 "Mexiko");
          speciesRepo.save(species2);
          Animal animal = new Animal("Leonie",
                  LocalDate.of(2025,5,8),
                  species1,
-                 Gender.FEMALE
+                 Gender.FEMALE,
+                 ""
          );
          animalRepo.save(animal);
 
@@ -216,7 +272,8 @@ class AnimalControllerTest {
                   "name": "Leonie",
                   "species": "Phidippus ardens",
                   "birthDate": "2025-05-08",
-                  "gender": "FEMALE"
+                  "gender": "weiblich",
+                  "imgUrl": ""
                   }
                 """))
                  .andExpect(MockMvcResultMatchers.status().isBadRequest());
@@ -233,7 +290,8 @@ class AnimalControllerTest {
                   "name": "Leonie",
                   "species": "Phidippus ardens",
                   "birthDate": "2025-05-08",
-                  "gender": "weiblich"
+                  "gender": "weiblich",
+                  "imgUrl": ""
                   }
                 """))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
@@ -242,12 +300,15 @@ class AnimalControllerTest {
     @Test
     void updateAnimalById_shouldReturnNotFound_whenSpeciesDoesntExist() throws Exception {
         // Given
-        Species species1 = new Species("Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species species1 = new Species("Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
         speciesRepo.save(species1);
         Animal animal = new Animal("Leonie",
                 LocalDate.of(2025,5,8),
                 species1,
-                Gender.FEMALE
+                Gender.FEMALE,
+                ""
         );
         animalRepo.save(animal);
 
@@ -260,7 +321,8 @@ class AnimalControllerTest {
                   "name": "Leonie",
                   "species": "Phidippus ardens",
                   "birthDate": "2025-05-08",
-                  "gender": "FEMALE"
+                  "gender": "FEMALE",
+                  "imgUrl": ""
                   }
                 """))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
@@ -269,13 +331,16 @@ class AnimalControllerTest {
     @Test
     void deleteAnimal_shouldReturnNoContent_whenAnimalWasDeletedSuccessfully() throws Exception {
         // Given
-        Species species = new Species("Phidippus regius", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg");
+        Species species = new Species("Phidippus regius",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+                "Karibik, Florida");
         speciesRepo.save(species);
         Animal animal = new Animal(
                 "Leonie",
                 LocalDate.of(2025,5,8),
                 species,
-                Gender.FEMALE
+                Gender.FEMALE,
+                ""
         );
         animalRepo.save(animal);
 
@@ -290,5 +355,4 @@ class AnimalControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/animals/1"))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
-
 }

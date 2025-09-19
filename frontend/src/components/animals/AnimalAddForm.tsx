@@ -11,12 +11,10 @@ type AnimalAddFormProps = {
 }
 
 export default function AnimalAddForm({show, setShow, speciesList, addAnimal}: AnimalAddFormProps) {
-    const emptyAnimalCreation={name: "", birthDate: "", species: "", gender: ""}
+    const emptyAnimalCreation={name: "", birthDate: "", species: "", gender: "", imgUrl: ""}
     const [newAnimal, setNewAnimal] = useState<AnimalCreation>(emptyAnimalCreation)
 
     function handleChangeName(value: string) {
-
-        console.log(value)
 
         setNewAnimal(
             {
@@ -27,8 +25,6 @@ export default function AnimalAddForm({show, setShow, speciesList, addAnimal}: A
     }
 
     function handleChangeSpecies(value: string) {
-
-        console.log(value)
 
         setNewAnimal(
             {
@@ -52,12 +48,20 @@ export default function AnimalAddForm({show, setShow, speciesList, addAnimal}: A
 
     function handleChangeBirthdate(value: string) {
 
-        console.log(value)
-
         setNewAnimal(
             {
                 ...newAnimal,
                 birthDate: value
+            }
+        )
+    }
+
+    function handleChangeImgUrl (value: string) {
+
+        setNewAnimal(
+            {
+                ...newAnimal,
+                imgUrl: value
             }
         )
     }
@@ -109,6 +113,14 @@ export default function AnimalAddForm({show, setShow, speciesList, addAnimal}: A
                             <Form.Group controlId="animalBirthdate">
                                 <Form.Label>Geburtsdatum</Form.Label>
                                 <Form.Control onChange={(e) => handleChangeBirthdate(e.target.value) } type="date" />
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Form.Group controlId="animalImgUrl">
+                                <Form.Label>Url für ein Image</Form.Label>
+                                <Form.Control onChange={(e) => handleChangeImgUrl(e.target.value) } type="text" />
                             </Form.Group>
                         </Col>
                     </Row>

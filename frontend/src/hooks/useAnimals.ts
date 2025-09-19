@@ -7,7 +7,7 @@ import {useContextThrowUndefined} from "../contexts/contextUndefined.ts";
 import type {AnimalCreation} from "../types/AnimalCreation.ts";
 
 export default function useAnimals(addNotes: (note: Note)=> void)
-    : [Animal[], (animal: AnimalCreation) => void, (animal: Animal) => void] {
+    : [Animal[], (animal: AnimalCreation) => void, (animal: Animal) => void, (animal: Animal) => void] {
 
     const [animalList, setAnimalList] = useState<Animal[]>([])
     const {setIsLoading} = useContextThrowUndefined<{
@@ -46,7 +46,18 @@ export default function useAnimals(addNotes: (note: Note)=> void)
         }
     }
 
-//    const updateAnimals (animal: Animal): Animal {}
+    async function updateAnimal (animal: Animal) {
+        setIsLoading(true)
+        try{
+            const response = await axios.put("api/animals/"+animal.id)
+            setIsLoading(false)
+            void getAnimals()
+            addNotes({message: response.data.name + " wurde refolgreich angelegt", variant: "success"})
+        } catch (e) {
+            setIsLoading(false)
+            addNotes({message: "Es ist icht gelungen, " + animal.name + " anzulegen: "+ e, variant: "warning"})
+        }
+    }
 
     async function deleteAnimal(animal: Animal) {
         setIsLoading(true)
@@ -61,6 +72,6 @@ export default function useAnimals(addNotes: (note: Note)=> void)
         }
     }
 
-    return [animalList, addAnimal, deleteAnimal];
+    return [animalList, addAnimal, updateAnimal, deleteAnimal];
 
 }

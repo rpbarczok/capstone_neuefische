@@ -13,4 +13,5 @@ public class AnimalIdInputDto {
     private String birthDate;
     private String species;
     private String gender;
+    private String imgUrl;
 }

@@ -45,8 +45,7 @@ public class AnimalService {
     }
 
     public List<Animal> getAllAnimals(){
-        List<Animal> result = (List<Animal>) animalRepository.findAll();
-        return result;
+        return (List<Animal>) animalRepository.findAll();
     }
 
     public Animal getAnimalById(int id) {
@@ -63,7 +62,8 @@ public class AnimalService {
         Animal newAnimal = new Animal(animal.getName(),
                 parseStringToLocalDate(animal.getBirthDate()),
                 parseGenusToSpecies(animal.getSpecies()),
-                Gender.getGenderFromString(animal.getGender()));
+                Gender.getGenderFromString(animal.getGender()),
+                animal.getImgUrl());
         System.out.println(newAnimal);
         try {
             Animal createdAnimal = animalRepository.save(newAnimal);
@@ -81,7 +81,8 @@ public class AnimalService {
                     animalIdInputDto.getName(),
                     parseStringToLocalDate(animalIdInputDto.getBirthDate()),
                     parseGenusToSpecies(animalIdInputDto.getSpecies()),
-                    Gender.getGenderFromString(animalIdInputDto.getGender())
+                    Gender.getGenderFromString(animalIdInputDto.getGender()),
+                    animalIdInputDto.getImgUrl()
                     );
             Animal savedAnimal = animalRepository.save(updatedAnimal);
             if (savedAnimal == null) {
@@ -110,6 +111,4 @@ public class AnimalService {
             throw new NotFoundException("animal", id);
         }
     }
-
-
 }

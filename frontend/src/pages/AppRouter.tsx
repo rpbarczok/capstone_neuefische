@@ -12,14 +12,15 @@ type RouterProps = {
 }
 
 export default function AppRouter({addNote}: RouterProps) {
-    const [animalList, addAnimal, deleteAnimal] = useAnimals(addNote)
-    const [speciesList, addSpecies, deleteSpecies] = useSpecies(addNote)
+    const [animalList, addAnimal, updateAnimal, deleteAnimal] = useAnimals(addNote)
+    const [speciesList, addSpecies, updateSpecies, deleteSpecies] = useSpecies(addNote)
     return (
         <Routes>
             <Route path="/" element={<HomePage/>}/>
             <Route path="/animals" element={<AnimalPage
                 animalList={animalList}
                 addAnimal={addAnimal}
+                updateAnimal={updateAnimal}
                 deleteAnimal={deleteAnimal}
                 speciesList={speciesList}
             />}/>
@@ -27,6 +28,7 @@ export default function AppRouter({addNote}: RouterProps) {
             <Route path="/species" element={<SpeciesPage
                 speciesList={speciesList}
                 addSpecies={addSpecies}
+                updateSpecies={updateSpecies}
                 deleteSpecies={deleteSpecies}/>} />
         </Routes>
 
