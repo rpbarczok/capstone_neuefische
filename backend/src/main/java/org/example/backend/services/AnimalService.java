@@ -6,8 +6,10 @@ import org.example.backend.exceptions.*;
 import org.example.backend.models.Animal;
 import org.example.backend.models.Gender;
 import org.example.backend.models.Species;
+import org.example.backend.models.Terrarium;
 import org.example.backend.repositories.AnimalRepository;
 import org.example.backend.repositories.SpeciesRepository;
+import org.example.backend.repositories.TerrariumRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -21,10 +23,14 @@ public class AnimalService {
 
     private final SpeciesRepository speciesRepository;
 
+    private final TerrariumRepository terrariumRepository;
+
     public AnimalService(AnimalRepository animalRepository,
-                         SpeciesRepository speciesRepository) {
+                         SpeciesRepository speciesRepository,
+                         TerrariumRepository terrariumRepository) {
         this.animalRepository = animalRepository;
         this.speciesRepository = speciesRepository;
+        this.terrariumRepository = terrariumRepository;
     }
 
     LocalDate parseStringToLocalDate(String date) {
@@ -44,6 +50,15 @@ public class AnimalService {
         }
     }
 
+    Terrarium parseNameToTerrarium(String name) {
+        Terrarium terrarium = terrariumRepository.getTerrariumByName(name);
+        if (terrarium == null) {
+            throw new NameNotFoundException("Terrarium", name);
+        } else {
+            return terrarium;
+        }
+    }
+
     public List<Animal> getAllAnimals(){
         return (List<Animal>) animalRepository.findAll();
     }
@@ -58,15 +73,17 @@ public class AnimalService {
     }
 
     public Animal addOneAnimal(AnimalDto animal) {
-
+        System.out.println(animal);
         Animal newAnimal = new Animal(animal.getName(),
                 parseStringToLocalDate(animal.getBirthDate()),
                 parseGenusToSpecies(animal.getSpecies()),
+                parseNameToTerrarium(animal.getTerrarium()),
                 Gender.getGenderFromString(animal.getGender()),
                 animal.getImgUrl());
-        System.out.println(newAnimal);
         try {
+            System.out.println(newAnimal);
             Animal createdAnimal = animalRepository.save(newAnimal);
+            System.out.println(createdAnimal);
             return animalRepository.findById(createdAnimal.getId()).orElseThrow(() -> new CreationFailedException("animal", animal.getName()));
         } catch (Exception e) {
             throw new CreationFailedException("animal", animal.getName());
@@ -81,6 +98,7 @@ public class AnimalService {
                     animalIdInputDto.getName(),
                     parseStringToLocalDate(animalIdInputDto.getBirthDate()),
                     parseGenusToSpecies(animalIdInputDto.getSpecies()),
+                    parseNameToTerrarium(animalIdInputDto.getTerrarium()),
                     Gender.getGenderFromString(animalIdInputDto.getGender()),
                     animalIdInputDto.getImgUrl()
                     );

@@ -50,5 +50,6 @@ public class SpeciesController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteSpeciesById(@PathVariable int id, HttpServletResponse response) {
         response.setHeader("X-Clacks-Overhead", "GNU Terry Pratchett");
-        speciesService.deleteSpecies(id);}
+        speciesService.deleteSpecies(id);
+    }
 }

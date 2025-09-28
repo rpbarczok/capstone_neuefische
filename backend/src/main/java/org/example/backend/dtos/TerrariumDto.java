@@ -7,11 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AnimalDto {
+public class TerrariumDto {
     private String name;
-    private String birthDate;
-    private String species;
-    private String terrarium;
-    private String gender;
-    private String imgUrl;
+    private int height;
+    private int width;
+    private int depth;
 }

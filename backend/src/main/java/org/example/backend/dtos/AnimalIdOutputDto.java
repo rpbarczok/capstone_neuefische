@@ -13,6 +13,7 @@ public class AnimalIdOutputDto {
     private String birthDate;
     private Long age;
     private String species;
+    private String terrarium;
     private String gender;
     private String imgUrl;
 }

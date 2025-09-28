@@ -7,7 +7,6 @@ import org.example.backend.dtos.AnimalIdOutputDto;
 import org.example.backend.exceptions.BadRequestException;
 import org.example.backend.models.Animal;
 import org.example.backend.models.Gender;
-import org.example.backend.models.Species;
 import org.example.backend.services.AnimalService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +34,7 @@ public class AnimalController {
                 animal.getBirthDate().toString(),
                 ChronoUnit.DAYS.between(animal.getBirthDate(), LocalDate.now()),
                 animal.getSpecies().getGenus(),
+                animal.getTerrarium().getName(),
                 Gender.getGenderStringFromGender(String.valueOf(animal.getGender())),
                 animalImage
         );
