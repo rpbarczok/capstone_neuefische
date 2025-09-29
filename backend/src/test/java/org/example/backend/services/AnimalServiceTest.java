@@ -6,8 +6,10 @@ import org.example.backend.exceptions.*;
 import org.example.backend.models.Animal;
 import org.example.backend.models.Gender;
 import org.example.backend.models.Species;
+import org.example.backend.models.Terrarium;
 import org.example.backend.repositories.AnimalRepository;
 import org.example.backend.repositories.SpeciesRepository;
+import org.example.backend.repositories.TerrariumRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.annotation.DirtiesContext;
 
@@ -25,14 +27,58 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 class AnimalServiceTest {
 
+    AnimalRepository animalRepo = mock(AnimalRepository.class);
+    SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
+    TerrariumRepository terrariumRepo = mock(TerrariumRepository.class);
+    AnimalService service = new AnimalService(animalRepo, speciesRepo, terrariumRepo);
+
+    LocalDate birthDate = LocalDate.of(2025, 5, 8);
+
+    Species species1Id = new  Species(1,
+            "Phidippus regius",
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+            "Karibik, Florida");
+    Species species2Id = new Species(2,
+            "Phidippus ardens",
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg",
+            "Mexiko");
+    Terrarium terrarium = new Terrarium("Leonies Castle",
+            30,
+            20,
+            20);
+    Terrarium terrariumId = new Terrarium(1,
+            "Leonies Castle",
+            30,
+            20,
+            20);
+    Animal leonie = new Animal(
+            "Leonie",
+            birthDate,
+            species1Id,
+            terrariumId,
+            Gender.FEMALE,
+            "");
+    Animal leonieId = new Animal(
+            1,
+            "Leonie",
+            birthDate,
+            species1Id,
+            terrariumId,
+            Gender.FEMALE,
+            "");
+    AnimalDto leonieInput = new AnimalDto(
+            "Leonie",
+            birthDate.toString(),
+            "Phidippus regius",
+            "Leonies Castle",
+            "weiblich",
+            "");
+
+
     @Test
     void getAllAnimals_returnsEmptyList_WhenDBIsEmpty() {
         //given
         List<Animal> animalList = new ArrayList<>();
-
-        AnimalRepository animalRepo = mock(AnimalRepository.class);
-        SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
-        AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
         when(animalRepo.findAll()).thenReturn(animalList);
 
@@ -45,19 +91,8 @@ class AnimalServiceTest {
     @Test
     void getAllAnimals_returnsAnimalsList_WhenAnimalListIsNotEmpty() {
         // given
-        Animal animal = new Animal("Leonie",
-                LocalDate.of(2025, 5, 8),
-                new Species("Phidippus regius",
-                        "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
-                        "Karibik, Florida"),
-                Gender.FEMALE,
-                "");
         ArrayList<Animal> animalList = new ArrayList<>();
-        animalList.add(animal);
-
-        AnimalRepository animalRepo = mock(AnimalRepository.class);
-        SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
-        AnimalService service = new AnimalService(animalRepo, speciesRepo);
+        animalList.add(leonie);
 
         when(animalRepo.findAll()).thenReturn(animalList);
 
@@ -71,156 +106,85 @@ class AnimalServiceTest {
     @Test
     void addOneAnimal_shouldReturnAnimal_WhenCalledWithValidData() {
         // given
-        LocalDate date = LocalDate.of(2025, 5, 8);
-
-        AnimalDto animalInput = new AnimalDto("Leonie", date.toString(),  "Phidippus regius", "weiblich", "");
-
-        AnimalRepository animalRepo = mock(AnimalRepository.class);
-        SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
-
-        Species speciesInput = new  Species(1,
-                "Phidippus regius",
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
-                "Karibik, Florida");
-
-        Animal animalWithoutId = new Animal("Leonie", date,  speciesInput, Gender.FEMALE, "");
-        Animal animalWithId = new Animal(1, "Leonie", date,  speciesInput, Gender.FEMALE, "");
-        AnimalService service = new AnimalService(animalRepo, speciesRepo);
-
-        when(speciesRepo.getSpeciesByGenus("Phidippus regius")).thenReturn(speciesInput);
-        when(animalRepo.save(animalWithoutId)).thenReturn(animalWithId);
-        when(animalRepo.findById(animalWithId.getId())).thenReturn(Optional.of(animalWithId));
+        when(speciesRepo.getSpeciesByGenus("Phidippus regius")).thenReturn(species1Id);
+        when(terrariumRepo.getTerrariumByName("Leonies Castle")).thenReturn(terrariumId);
+        when(animalRepo.save(any())).thenReturn(leonieId);
+        when(animalRepo.findById(1)).thenReturn(Optional.of(leonieId));
 
         // when
-        Animal actual = service.addOneAnimal(animalInput);
+        Animal actual = service.addOneAnimal(leonieInput);
 
         // then
-        assertEquals(animalWithId, actual);
+        assertEquals(leonieId, actual);
     }
 
     @Test
     void addOneAnimal_shouldThrowException_WhenCalledWithNonExistingSpecies() {
-        // given
-        LocalDate date = LocalDate.of(2025, 5, 8);
-
-        AnimalDto animalInput = new AnimalDto("Leonie", date.toString(),  "Phidippus regius", "weiblich","");
-
-        AnimalRepository animalRepo = mock(AnimalRepository.class);
-        SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
-
-        AnimalService service = new AnimalService(animalRepo, speciesRepo);
+        when(speciesRepo.getSpeciesByGenus("Phidippus regius")).thenReturn(null);
+        when(terrariumRepo.getTerrariumByName("Leonies Castle")).thenReturn(terrariumId);
 
         // when & then
-        assertThrows(NameNotFoundException.class, () -> service.addOneAnimal(animalInput));
+        assertThrows(NameNotFoundException.class, () -> service.addOneAnimal(leonieInput));
     }
 
+    @Test
+    void addOneAnimal_shouldThrowException_WhenCalledWithNonExistingTerrarium() {
+        when(speciesRepo.getSpeciesByGenus("Phidippus regius")).thenReturn(species1Id);
+        when(terrariumRepo.getTerrariumByName("Leonies Castle")).thenReturn(null);
+
+        // when & then
+        assertThrows(NameNotFoundException.class, () -> service.addOneAnimal(leonieInput));
+    }
 
     @Test
     void addOneAnimal_shouldThrowException_WhenCalledWithNonParsableStringDate() {
         // given
 
-        AnimalDto animalInput = new AnimalDto("Leonie", "asdf",  "Phidippus regius", "weiblich", "");
+        AnimalDto animalInput = new AnimalDto("Leonie", "asdf",  "Phidippus regius", "Leonies Castle", "weiblich", "");
 
-        AnimalRepository animalRepo = mock(AnimalRepository.class);
-        SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
-
-        Species speciesInput = new  Species(1,
-                "Phidippus regius",
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
-                "Karibik, Florida");
-
-        AnimalService service = new AnimalService(animalRepo, speciesRepo);
-
-        when(speciesRepo.getSpeciesByGenus("Phidippus regius")).thenReturn(speciesInput);
+        when(speciesRepo.getSpeciesByGenus("Phidippus regius")).thenReturn(species1Id);
 
         // when & then
         assertThrows(BadRequestException.class, () -> service.addOneAnimal(animalInput));
-
     }
 
     @Test
     void addOneAnimal_shouldThrowException_WhenCreationFailed() {
         // given
-        LocalDate date = LocalDate.of(2025, 5, 8);
 
-        AnimalDto animalInput = new AnimalDto("Leonie", date.toString(),  "Phidippus regius", "weiblich", "");
-
-        AnimalRepository animalRepo = mock(AnimalRepository.class);
-        SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
-
-        Species speciesInput = new  Species(1,
-                "Phidippus regius",
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
-                "Karibik, Florida");
-
-        Animal animalWithoutId = new Animal("Leonie", date,  speciesInput, Gender.FEMALE, "");
-        AnimalService service = new AnimalService(animalRepo, speciesRepo);
-
-        when(speciesRepo.getSpeciesByGenus("Phidippus regius")).thenReturn(speciesInput);
-        when(animalRepo.save(animalWithoutId)).thenReturn(null);
+        when(speciesRepo.getSpeciesByGenus("Phidippus regius")).thenReturn(species1Id);
+        when(terrariumRepo.getTerrariumByName(terrarium.getName())).thenReturn(terrariumId);
+        when(animalRepo.save(leonie)).thenReturn(null);
 
         // when & then
-        assertThrows(CreationFailedException.class, () -> service.addOneAnimal(animalInput));
+        assertThrows(CreationFailedException.class, () -> service.addOneAnimal(leonieInput));
 
     }
 
     @Test
     void addOneAnimal_shouldThrowException_WhenCreatedAnimalWasNotFound() {
         // given
-        LocalDate date = LocalDate.of(2025, 5, 8);
 
-        AnimalDto animalInput = new AnimalDto("Leonie", date.toString(),  "Phidippus regius", "weiblich", "");
-
-        AnimalRepository animalRepo = mock(AnimalRepository.class);
-        SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
-
-        Species speciesInput = new  Species(1,
-                "Phidippus regius",
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
-                "Karibik, Florida");
-
-        Animal animalWithoutId = new Animal("Leonie", date,  speciesInput, Gender.FEMALE, "");
-        Animal animalWithId = new Animal(1, "Leonie", date,  speciesInput, Gender.FEMALE, "");
-        AnimalService service = new AnimalService(animalRepo, speciesRepo);
-
-        when(speciesRepo.getSpeciesByGenus("Phidippus regius")).thenReturn(speciesInput);
-        when(animalRepo.save(animalWithoutId)).thenReturn(animalWithId);
-        when(animalRepo.findById(animalWithId.getId())).thenReturn(Optional.empty());
+        when(speciesRepo.getSpeciesByGenus("Phidippus regius")).thenReturn(species1Id);
+        when(terrariumRepo.getTerrariumByName(terrarium.getName())).thenReturn(terrariumId);
+        when(animalRepo.save(leonie)).thenReturn(leonieId);
+        when(animalRepo.findById(leonieId.getId())).thenReturn(Optional.empty());
 
         // when & then
-        assertThrows(CreationFailedException.class, () -> service.addOneAnimal(animalInput));
+        assertThrows(CreationFailedException.class, () -> service.addOneAnimal(leonieInput));
 
     }
 
     @Test
     void getAnimalById_shouldReturnAnimal_whenAnimalExists() {
-        AnimalRepository animalRepo = mock(AnimalRepository.class);
-        SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
-        AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
-        Species species = new Species(1,
-                "Phidippus regius",
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
-                "Karibik, Florida");
-        Animal animal = new Animal(1,
-                "Leonie",
-                LocalDate.of(2025,5,8),
-                species,
-                Gender.FEMALE,
-                "");
+        when(animalRepo.findById(1)).thenReturn(Optional.of(leonieId));
 
-
-        when(animalRepo.findById(1)).thenReturn(Optional.of(animal));
-
-        assertEquals(animal,service.getAnimalById(1));
+        assertEquals(leonieId,service.getAnimalById(1));
     }
 
     @Test
     void getAnimalById_shouldThrowNotFoundError_whenAnimalDoesntExist() {
-        AnimalRepository animalRepo = mock(AnimalRepository.class);
-        SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
-
-        AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
         when(animalRepo.findById(1)).thenReturn(Optional.empty());
 
@@ -229,33 +193,13 @@ class AnimalServiceTest {
 
     @Test
     void updateAnimal_shouldReturnUpdatedAnimal_whenCalledWithValidData () {
-        AnimalRepository animalRepo = mock(AnimalRepository.class);
-        SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
-        AnimalService service = new AnimalService(animalRepo, speciesRepo);
-
-        Species oldSpecies = new Species(1,
-                "Phidippus regius",
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
-                "Karibik, Florida");
-        Species newSpecies = new Species(2,
-                "Phidippus ardens",
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg",
-                "Mexiko");
-
-        Animal oldAnimal = new Animal(
-                1,
-                "Leonie",
-                LocalDate.of(2025, 5,8),
-                oldSpecies,
-                Gender.FEMALE,
-                ""
-                );
 
         AnimalIdInputDto newAnimalDto = new AnimalIdInputDto(
                 1,
                 "Leon",
                 "2025-05-08",
                 "Phidippus ardens",
+                "Leonies Castle",
                 "männlich",
                 ""
         );
@@ -264,13 +208,15 @@ class AnimalServiceTest {
                 1,
                 "Leon",
                 LocalDate.of(2025,5,8),
-                newSpecies,
+                species2Id,
+                terrariumId,
                 Gender.MALE,
                 ""
         );
 
-        when(animalRepo.findById(1)).thenReturn(Optional.of(oldAnimal));
-        when(speciesRepo.getSpeciesByGenus(newSpecies.getGenus())).thenReturn(newSpecies);
+        when(animalRepo.findById(1)).thenReturn(Optional.of(leonieId));
+        when(speciesRepo.getSpeciesByGenus(species2Id.getGenus())).thenReturn(species2Id);
+        when(terrariumRepo.getTerrariumByName(terrarium.getName())).thenReturn(terrariumId);
         when(animalRepo.save(newAnimal)).thenReturn(newAnimal);
 
         // when
@@ -282,15 +228,13 @@ class AnimalServiceTest {
 
     @Test
     void updateAnimal_shouldReturnNotFoundException_whenCalledWithValidDataOnNonExistingAnimal () {
-        AnimalRepository animalRepo = mock(AnimalRepository.class);
-        SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
-        AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
         AnimalIdInputDto newAnimalDto = new AnimalIdInputDto(
                 1,
                 "Leon",
                 "2025-05-08",
                 "Phidippus ardens",
+                "Leonies Castle",
                 "männlich",
                 ""
         );
@@ -303,34 +247,18 @@ class AnimalServiceTest {
 
     @Test
     void updateAnimal_shouldThrowBadRequest_whenCalledWithNotParsableBirthDate () {
-        AnimalRepository animalRepo = mock(AnimalRepository.class);
-        SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
-        AnimalService service = new AnimalService(animalRepo, speciesRepo);
-
-        Species oldSpecies = new Species(1,
-                "Phidippus regius",
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
-                "Karibik, Florida");
-
-        Animal oldAnimal = new Animal(
-                1,
-                "Leonie",
-                LocalDate.of(2025, 5,8),
-                oldSpecies,
-                Gender.FEMALE,
-                ""
-        );
 
         AnimalIdInputDto newAnimalDto = new AnimalIdInputDto(
                 1,
                 "Leon",
                 "nichtFormatierbar",
                 "Phidippus ardens",
+                "Leonies Castle",
                 "männlich",
                 ""
         );
 
-        when(animalRepo.findById(1)).thenReturn(Optional.of(oldAnimal));
+        when(animalRepo.findById(1)).thenReturn(Optional.of(leonieId));
 
         // when & then
         assertThrows(BadRequestException.class, () -> service.updateAnimal(newAnimalDto));
@@ -338,40 +266,21 @@ class AnimalServiceTest {
 
     @Test
     void updateAnimal_shouldThrowNameNotFoundException_whenCalledWithNonExistingSpecies () {
-        AnimalRepository animalRepo = mock(AnimalRepository.class);
-        SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
-        AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
-        Species oldSpecies = new Species(1,
-                "Phidippus regius",
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
-                "Karibik, Florida");
-        Species newSpecies = new Species(2,
-                "Phidippus ardens",
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg",
-                "Mexiko");
-
-        Animal oldAnimal = new Animal(
-                1,
-                "Leonie",
-                LocalDate.of(2025, 5,8),
-                oldSpecies,
-                Gender.FEMALE,
-                ""
-        );
+        AnimalService service = new AnimalService(animalRepo, speciesRepo, terrariumRepo);
 
         AnimalIdInputDto newAnimalDto = new AnimalIdInputDto(
                 1,
                 "Leon",
                 "2025-05-08",
                 "Phidippus ardens",
+                "Leonies Castle",
                 "männlich",
                 ""
         );
 
-
-        when(animalRepo.findById(1)).thenReturn(Optional.of(oldAnimal));
-        when(speciesRepo.getSpeciesByGenus(newSpecies.getGenus())).thenReturn(null);
+        when(animalRepo.findById(1)).thenReturn(Optional.of(leonie));
+        when(speciesRepo.getSpeciesByGenus(species2Id.getGenus())).thenReturn(null);
 
         // then
         // when & then
@@ -380,33 +289,13 @@ class AnimalServiceTest {
 
     @Test
     void updateAnimal_shouldReturnUpdateFailedException_whenUpdateFails () {
-        AnimalRepository animalRepo = mock(AnimalRepository.class);
-        SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
-        AnimalService service = new AnimalService(animalRepo, speciesRepo);
-
-        Species oldSpecies = new Species(1,
-                "Phidippus regius",
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
-                "Karibik, Florida");
-        Species newSpecies = new Species(2,
-                "Phidippus ardens",
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Phidippus_ardens_19872715_cropped.jpg/330px-Phidippus_ardens_19872715_cropped.jpg",
-                "Mexiko");
-
-        Animal oldAnimal = new Animal(
-                1,
-                "Leonie",
-                LocalDate.of(2025, 5,8),
-                oldSpecies,
-                Gender.FEMALE,
-                ""
-        );
 
         AnimalIdInputDto newAnimalDto = new AnimalIdInputDto(
                 1,
                 "Leon",
                 "2025-05-08",
                 "Phidippus ardens",
+                "Leonies Castle",
                 "männlich",
                 ""
         );
@@ -414,14 +303,16 @@ class AnimalServiceTest {
         Animal newAnimal = new Animal(
                 1,
                 "Leon",
-                LocalDate.of(2025,5,8),
-                newSpecies,
+                birthDate,
+                species2Id,
+                terrariumId,
                 Gender.MALE,
                 ""
         );
 
-        when(animalRepo.findById(1)).thenReturn(Optional.of(oldAnimal));
-        when(speciesRepo.getSpeciesByGenus(newSpecies.getGenus())).thenReturn(newSpecies);
+        when(animalRepo.findById(1)).thenReturn(Optional.of(leonieId));
+        when(speciesRepo.getSpeciesByGenus(species2Id.getGenus())).thenReturn(species2Id);
+        when(terrariumRepo.getTerrariumByName(terrarium.getName())).thenReturn(terrariumId);
         when(animalRepo.save(newAnimal)).thenReturn(null);
 
         // then
@@ -431,25 +322,8 @@ class AnimalServiceTest {
      @Test
     void deleteAnimal_shouldReturnVoid_whenCalledWithExistingSpecies() {
         // given
-         AnimalRepository animalRepo = mock(AnimalRepository.class);
-         SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
-         AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
-         Species species = new Species(1,
-                 "Phidippus regius",
-                 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
-                 "Karibik, Florida");
-
-         Animal animal = new Animal(
-                 1,
-                 "Leonie",
-                 LocalDate.of(2025, 5,8),
-                 species,
-                 Gender.FEMALE,
-                 ""
-         );
-
-         when(animalRepo.findById(1)).thenReturn(Optional.of(animal), Optional.empty());
+         when(animalRepo.findById(1)).thenReturn(Optional.of(leonieId), Optional.empty());
 
          // When
          service.deleteAnimal(1);
@@ -461,9 +335,7 @@ class AnimalServiceTest {
      @Test
     void deleteAnimal_shouldThrowNotFound_whenCalledWithNonExistingAnimal () {
          // given
-         AnimalRepository animalRepo = mock(AnimalRepository.class);
-         SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
-         AnimalService service = new AnimalService(animalRepo, speciesRepo);
+
          when(animalRepo.findById(1)).thenReturn(Optional.empty());
 
          // when & then
@@ -473,25 +345,8 @@ class AnimalServiceTest {
     @Test
     void deleteAnimal_shouldThrowDeletionFailed_whenAnimalDeletionFails() {
         // given
-        AnimalRepository animalRepo = mock(AnimalRepository.class);
-        SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
-        AnimalService service = new AnimalService(animalRepo, speciesRepo);
 
-        Species species = new Species(1,
-                "Phidippus regius",
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
-                "Karibik, Florida");
-
-        Animal animal = new Animal(
-                1,
-                "Leonie",
-                LocalDate.of(2025, 5,8),
-                species,
-                Gender.FEMALE,
-                ""
-        );
-
-        when(animalRepo.findById(1)).thenReturn(Optional.of(animal));
+        when(animalRepo.findById(1)).thenReturn(Optional.of(leonieId));
         doThrow(new RuntimeException("something went wrong"))
                 .when(animalRepo)
                 .deleteById(1);
@@ -502,25 +357,7 @@ class AnimalServiceTest {
     @Test
     void deleteAnimal_shouldThrowDeletionFailed_whenDeletedAnimalStillExists() {
         // given
-        AnimalRepository animalRepo = mock(AnimalRepository.class);
-        SpeciesRepository speciesRepo = mock(SpeciesRepository.class);
-        AnimalService service = new AnimalService(animalRepo, speciesRepo);
-
-        Species species = new Species(1,
-                "Phidippus regius",
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
-                "Karibik, Florida");
-
-        Animal animal = new Animal(
-                1,
-                "Leonie",
-                LocalDate.of(2025, 5,8),
-                species,
-                Gender.FEMALE,
-                ""
-        );
-
-        when(animalRepo.findById(1)).thenReturn(Optional.of(animal));
+        when(animalRepo.findById(1)).thenReturn(Optional.of(leonieId));
 
         // when & then
         assertThrows(DeletionFailedException.class, () -> service.deleteAnimal(1));

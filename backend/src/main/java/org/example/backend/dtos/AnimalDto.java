@@ -11,6 +11,7 @@ public class AnimalDto {
     private String name;
     private String birthDate;
     private String species;
+    private String terrarium;
     private String gender;
     private String imgUrl;
 }

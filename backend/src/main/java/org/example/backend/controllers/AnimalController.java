@@ -1,12 +1,12 @@
 package org.example.backend.controllers;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.example.backend.dtos.AnimalDto;
 import org.example.backend.dtos.AnimalIdInputDto;
 import org.example.backend.dtos.AnimalIdOutputDto;
 import org.example.backend.exceptions.BadRequestException;
 import org.example.backend.models.Animal;
 import org.example.backend.models.Gender;
-import org.example.backend.models.Species;
 import org.example.backend.services.AnimalService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -34,13 +34,15 @@ public class AnimalController {
                 animal.getBirthDate().toString(),
                 ChronoUnit.DAYS.between(animal.getBirthDate(), LocalDate.now()),
                 animal.getSpecies().getGenus(),
+                animal.getTerrarium().getName(),
                 Gender.getGenderStringFromGender(String.valueOf(animal.getGender())),
                 animalImage
         );
     }
 
     @GetMapping
-    public List<AnimalIdOutputDto> getAllAnimals(){
+    public List<AnimalIdOutputDto> getAllAnimals(HttpServletResponse response){
+        response.setHeader("X-Clacks-Overhead", "GNU Terry Pratchett");
         List<Animal> animals = animalService.getAllAnimals();
         ArrayList<AnimalIdOutputDto> animalIdOutputDtos = new ArrayList<>();
         for(Animal animal : animals){
@@ -50,19 +52,22 @@ public class AnimalController {
     }
 
     @PostMapping
-    public AnimalIdOutputDto addAnimal(@RequestBody AnimalDto animalDto){
+    public AnimalIdOutputDto addAnimal(@RequestBody AnimalDto animalDto, HttpServletResponse response){
+        response.setHeader("X-Clacks-Overhead", "GNU Terry Pratchett");
         Animal animal = animalService.addOneAnimal(animalDto);
         return transformAnimalToIdDto(animal);
     }
 
     @GetMapping("/{id}")
-    public AnimalIdOutputDto getAnimalById(@PathVariable int id){
+    public AnimalIdOutputDto getAnimalById(@PathVariable int id, HttpServletResponse response){
+        response.setHeader("X-Clacks-Overhead", "GNU Terry Pratchett");
         Animal animal = animalService.getAnimalById(id);
         return transformAnimalToIdDto(animal);
     }
 
     @PutMapping("/{id}")
-    public AnimalIdOutputDto updateAnimal(@PathVariable int id, @RequestBody AnimalIdInputDto animalIdInputDto){
+    public AnimalIdOutputDto updateAnimal(@PathVariable int id, @RequestBody AnimalIdInputDto animalIdInputDto, HttpServletResponse response){
+        response.setHeader("X-Clacks-Overhead", "GNU Terry Pratchett");
         if (id == animalIdInputDto.getId()){
             Animal animal = animalService.updateAnimal(animalIdInputDto);
             return transformAnimalToIdDto(animal);
@@ -73,7 +78,8 @@ public class AnimalController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAnimal(@PathVariable int id){
+    public void deleteAnimal(@PathVariable int id, HttpServletResponse response){
+        response.setHeader("X-Clacks-Overhead", "GNU Terry Pratchett");
         animalService.deleteAnimal(id);
     }
 }

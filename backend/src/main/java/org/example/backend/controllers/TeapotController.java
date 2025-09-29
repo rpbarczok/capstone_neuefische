@@ -1,5 +1,6 @@
 package org.example.backend.controllers;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.example.backend.exceptions.ImATeapotException;
 import org.example.backend.exceptions.NotFoundException;
 import org.example.backend.exceptions.TeaNotFoundException;
@@ -13,7 +14,8 @@ import java.util.Objects;
 public class TeapotController {
 
     @GetMapping("/{beverage}")
-    public void iAmATeapot(@PathVariable String beverage) throws ImATeapotException {
+    public void iAmATeapot(@PathVariable String beverage, HttpServletResponse response) throws ImATeapotException {
+        response.setHeader("X-Clacks-Overhead", "GNU Terry Pratchett");
         if (!Objects.equals(beverage, "tea")) {
             throw new ImATeapotException(beverage);
         } else {

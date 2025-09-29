@@ -24,12 +24,13 @@ class SpeciesControllerTest {
     @Autowired
     private SpeciesRepository speciesRepo;
 
+    Species species = new Species("phidippus regius",
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
+            "Karibik, Florida");
+
     @Test
     void getSpecies_shouldReturnListOfSpecies_whenCalled() throws Exception {
         //Given
-        Species species = new Species("phidippus regius",
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
-                "Karibik, Florida");
         speciesRepo.save(species);
         //When & Then
         mockMvc.perform(MockMvcRequestBuilders.get("/api/species"))
@@ -71,9 +72,6 @@ class SpeciesControllerTest {
     @Test
     void getSpeciesById_shouldReturnsSpecies_WhenSpeciesExists() throws Exception {
         //Given
-        Species species = new Species("phidippus regius",
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
-                "Karibik, Florida");
         speciesRepo.save(species);
         //When & Then
         mockMvc.perform(MockMvcRequestBuilders.get("/api/species/1"))
@@ -99,9 +97,6 @@ class SpeciesControllerTest {
     @Test
     void deleteSpeciesById_shouldReturnNotContent_WhenSuccess() throws Exception {
         //Given
-        Species species = new Species("phidippus regius",
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
-                "Karibik, Florida");
         speciesRepo.save(species);
 
         //When & Then
@@ -119,9 +114,6 @@ class SpeciesControllerTest {
     @Test
     void updateSpeciesById_shouldReturnUpdatedSpecies_whenCalledWithValidDateAndOnExistingSpecies() throws Exception {
         // given
-        Species species = new Species("phidippus regius",
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
-                "Karibik, Florida");
         speciesRepo.save(species);
 
         //when & then
@@ -149,9 +141,6 @@ class SpeciesControllerTest {
     @Test
     void updateSpeciesById_shouldReturnBadRequest_whenIdFromInstanceAndFromURIDontMatch() throws Exception {
         // given
-        Species species = new Species("phidippus regius",
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Phidippus_regius_female_01.jpg/330px-Phidippus_regius_female_01.jpg",
-                "Karibik, Florida");
         speciesRepo.save(species);
 
         //when & then

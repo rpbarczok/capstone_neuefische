@@ -19,7 +19,7 @@ export default function useSpecies(addNotes: (note: Note)=> void)
     async function getSpecies() {
         setIsLoading(true)
         try {
-            const response = await axios.get("api/species")
+            const response = await axios.get("api/species", {headers: {"X-Clacks-Overhead": "GNU Terry Pratchett"}})
             setSpeciesList(response.data)
             setIsLoading(false)
         } catch {
@@ -31,7 +31,7 @@ export default function useSpecies(addNotes: (note: Note)=> void)
     async function addSpecies(species: SpeciesCreation){
         setIsLoading(true)
         try {
-            const response = await axios.post("api/species", species)
+            const response = await axios.post("api/species", species, {headers: {"X-Clacks-Overhead": "GNU Terry Pratchett"}})
             if (response.data !== null) {
                 setIsLoading(false)
                 void getSpecies()
@@ -49,7 +49,7 @@ export default function useSpecies(addNotes: (note: Note)=> void)
     async function updateSpecies(species: Species) {
         setIsLoading(true)
         try {
-            const response = await axios.put("api/species/"+species.id, species)
+            const response = await axios.put("api/species/"+species.id, species, {headers: {"X-Clacks-Overhead": "GNU Terry Pratchett"}})
             setIsLoading(false)
             void getSpecies()
             addNotes({message: "Die Spezies " + response.data.genus + " wurde erfolgreich upgedated.", variant: "success"})
@@ -62,7 +62,7 @@ export default function useSpecies(addNotes: (note: Note)=> void)
     async function deleteSpecies (species: Species) {
         setIsLoading(true)
         try {
-            await axios.delete("/api/species/"+species.id)
+            await axios.delete("/api/species/"+species.id, {headers: {"X-Clacks-Overhead": "GNU Terry Pratchett"}})
             setIsLoading(false)
             void getSpecies()
             addNotes({message: "Spezies " + species.genus + " wurde erfolgreich gelöscht.", variant: "success"})

@@ -29,26 +29,32 @@ public class Animal {
     @JoinColumn(name="species_id", nullable=false)
     private Species species;
 
+    @ManyToOne
+    @JoinColumn(name="terrarium_id", nullable=false)
+    private Terrarium terrarium;
+
     @Column(nullable = false)
     private Gender gender;
 
     private String imgUrl;
 
-    public Animal(String name, LocalDate birthDate, Species species, Gender gender, String imgUrl) {
+    public Animal(String name, LocalDate birthDate, Species species, Terrarium terrarium, Gender gender, String imgUrl) {
         this.name = name;
         this.age = ChronoUnit.DAYS.between(birthDate, LocalDate.now());
         this.birthDate = birthDate;
         this.species = species;
+        this.terrarium = terrarium;
         this.gender = gender;
         this.imgUrl = imgUrl;
     }
 
-    public Animal(int id, String name, LocalDate birthDate, Species species, Gender gender, String imgUrl) {
+    public Animal(int id, String name, LocalDate birthDate, Species species, Terrarium terrarium, Gender gender, String imgUrl) {
         this.id = id;
         this.name = name;
         this.age = ChronoUnit.DAYS.between(birthDate, LocalDate.now());
         this.birthDate = birthDate;
         this.species = species;
+        this.terrarium = terrarium;
         this.gender = gender;
         this.imgUrl = imgUrl;
     }
