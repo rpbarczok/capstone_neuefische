@@ -6,6 +6,7 @@ import {Col, Row} from "react-bootstrap";
 import {useState} from "react";
 import AnimalAddForm from "../components/animals/AnimalAddForm.tsx";
 import type {AnimalCreation} from "../types/AnimalCreation.ts";
+import type {Terrarium} from "../types/Terrarium.ts";
 
 type AnimalPageProps = {
     animalList: Animal[],
@@ -13,9 +14,10 @@ type AnimalPageProps = {
     speciesList: Species[],
     updateAnimal: (animal: Animal) => void
     deleteAnimal: (animal: Animal) => void
+    terrariumList: Terrarium[]
 }
 
-export default function AnimalPage({animalList, addAnimal, updateAnimal, deleteAnimal, speciesList}: AnimalPageProps) {
+export default function AnimalPage({animalList, addAnimal, updateAnimal, deleteAnimal, speciesList, terrariumList}: AnimalPageProps) {
     const [show, setShow] = useState<boolean>(false)
 
 
@@ -30,6 +32,7 @@ export default function AnimalPage({animalList, addAnimal, updateAnimal, deleteA
                 setShow={setShow}
                 speciesList={speciesList}
                 addAnimal={addAnimal}
+                terrariumList={terrariumList}
             />
             <Row>
                 {animalList.length === 0
@@ -39,7 +42,8 @@ export default function AnimalPage({animalList, addAnimal, updateAnimal, deleteA
                         animal={animal}
                         updateAnimal={updateAnimal}
                         deleteAnimal={deleteAnimal}
-                        speciesList={speciesList}/></Col>)
+                        speciesList={speciesList}
+                        terrariumList={terrariumList}/></Col>)
                 }
             </Row>
 

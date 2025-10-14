@@ -5,14 +5,16 @@ import {useState} from "react";
 import AnimalModalDelete from "./AnimalModalDelete.tsx";
 import AnimalModalUpdate from "./AnimalModalUpdate.tsx";
 import type {Species} from "../../types/Species.ts";
+import type {Terrarium} from "../../types/Terrarium.ts";
 
 type AnimalCardProps = {
     animal: Animal,
     updateAnimal: (animal: Animal) => void,
     deleteAnimal: (animal: Animal) => void,
     speciesList: Species[]
+    terrariumList: Terrarium[]
 }
-export default function AnimalCard ({animal, updateAnimal, deleteAnimal, speciesList}: AnimalCardProps) {
+export default function AnimalCard ({animal, updateAnimal, deleteAnimal, speciesList, terrariumList}: AnimalCardProps) {
 
     const [showDelete, setShowDelete] = useState(false)
     const [showUpdate, setShowUpdate] = useState(false)
@@ -27,6 +29,7 @@ export default function AnimalCard ({animal, updateAnimal, deleteAnimal, species
                     Spezies: {animal.species} <br/>
                     Geschlecht: {animal.gender} <br/>
                     Geburts- bzw. Ankunftsdatum: {animal.birthDate} (vor {animal.age} Tagen)
+                    Wohnt in: {animal.terrarium}
                 </Card.Text>
             </Card.Body>
             <CardFooter>
@@ -36,13 +39,14 @@ export default function AnimalCard ({animal, updateAnimal, deleteAnimal, species
                     animal={animal}
                     show={showDelete}
                     setShow={setShowDelete}
-                    deleteAnimal={deleteAnimal} />
+                    deleteAnimal={deleteAnimal}/>
                 <AnimalModalUpdate
                     animal={animal}
                     show={showUpdate}
                     setShow={setShowUpdate}
                     updateAnimal={updateAnimal}
                     speciesList={speciesList}
+                    terrariumList={terrariumList}
                     />
             </CardFooter>
 

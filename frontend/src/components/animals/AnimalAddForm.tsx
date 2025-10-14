@@ -2,16 +2,18 @@ import {Button, Col, Form, Modal, Row} from "react-bootstrap";
 import type {Species} from "../../types/Species.ts";
 import {useState} from "react";
 import type {AnimalCreation} from "../../types/AnimalCreation.ts";
+import type {Terrarium} from "../../types/Terrarium.ts";
 
 type AnimalAddFormProps = {
     show: boolean,
     setShow: (show: boolean) => void,
     addAnimal: (animal: AnimalCreation) => void
     speciesList: Species[]
+    terrariumList: Terrarium[]
 }
 
-export default function AnimalAddForm({show, setShow, speciesList, addAnimal}: AnimalAddFormProps) {
-    const emptyAnimalCreation={name: "", birthDate: "", species: "", gender: "", imgUrl: ""}
+export default function AnimalAddForm({show, setShow, speciesList, addAnimal, terrariumList}: AnimalAddFormProps) {
+    const emptyAnimalCreation={name: "", birthDate: "", species: "", gender: "", imgUrl: "", terrarium: ""}
     const [newAnimal, setNewAnimal] = useState<AnimalCreation>(emptyAnimalCreation)
 
     function handleChangeName(value: string) {
@@ -30,6 +32,16 @@ export default function AnimalAddForm({show, setShow, speciesList, addAnimal}: A
             {
                 ...newAnimal,
                 species: value
+            }
+        )
+    }
+
+    function handleChangeTerrarium(value: string) {
+
+        setNewAnimal(
+            {
+                ...newAnimal,
+                terrarium: value
             }
         )
     }
@@ -92,6 +104,17 @@ export default function AnimalAddForm({show, setShow, speciesList, addAnimal}: A
                                 <Form.Select onChange={(e) => handleChangeSpecies(e.target.value)} aria-label="Auswahl der Spezies">
                                     <option>Wähle eine Species</option>
                                     {speciesList.map(species => <option value={species.genus}>{species.genus}</option>)}
+                                </Form.Select>
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Form.Group controlId="animalTerrarium">
+                                <Form.Label>Terrarium</Form.Label>
+                                <Form.Select onChange={(e)=> handleChangeTerrarium(e.target.value)} aria-label="Auswahl des Terrariums">
+                                    <option>Wähle ein Terrarium</option>
+                                    {terrariumList.map(terrarium => <option value={terrarium.name}>{terrarium.name}</option>)}
                                 </Form.Select>
                             </Form.Group>
                         </Col>

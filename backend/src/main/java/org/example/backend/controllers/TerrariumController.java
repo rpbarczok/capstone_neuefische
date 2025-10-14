@@ -1,12 +1,14 @@
 package org.example.backend.controllers;
 
 import jakarta.servlet.http.HttpServletResponse;
+import org.example.backend.dtos.TerrariumIdOutputDto;
 import org.example.backend.exceptions.BadRequestException;
 import org.example.backend.models.Terrarium;
 import org.example.backend.services.TerrariumService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -17,10 +19,12 @@ public class TerrariumController {
 
     public TerrariumController(TerrariumService terrariumService) {this.terrariumService = terrariumService;}
 
+
     @GetMapping
     public List<Terrarium> getAllTerrariumIds(HttpServletResponse response) {
         response.setHeader("X-Clacks-Overhead", "GNU Terry Pratchett");
         return terrariumService.getAllTerraria();
+
     }
 
     @PostMapping

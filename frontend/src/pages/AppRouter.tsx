@@ -6,6 +6,7 @@ import SpeciesPage from "./SpeciesPage.tsx";
 import useAnimals from "../hooks/useAnimals.ts";
 import useSpecies from "../hooks/useSpecies.ts";
 import type {Note} from "../types/Note.ts";
+import useTerraria from "../hooks/useTerraria.ts";
 
 type RouterProps = {
     addNote: (note: Note) => void
@@ -14,6 +15,8 @@ type RouterProps = {
 export default function AppRouter({addNote}: RouterProps) {
     const [animalList, addAnimal, updateAnimal, deleteAnimal] = useAnimals(addNote)
     const [speciesList, addSpecies, updateSpecies, deleteSpecies] = useSpecies(addNote)
+    const [terrariumList, addTerrarium, updateTerrarium, deleteTerrarium] = useTerraria(addNote)
+
     return (
         <Routes>
             <Route path="/" element={<HomePage/>}/>
@@ -23,8 +26,14 @@ export default function AppRouter({addNote}: RouterProps) {
                 updateAnimal={updateAnimal}
                 deleteAnimal={deleteAnimal}
                 speciesList={speciesList}
+                terrariumList={terrariumList}
             />}/>
-            <Route path="/terraria" element={<TerrariumPage/>}/>
+            <Route path="/terraria" element={<TerrariumPage
+                terrariumList={terrariumList}
+                addTerrarium={addTerrarium}
+                updateTerrarium={updateTerrarium}
+                deleteTerrarium={deleteTerrarium}
+            />}/>
             <Route path="/species" element={<SpeciesPage
                 speciesList={speciesList}
                 addSpecies={addSpecies}
