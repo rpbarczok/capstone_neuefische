@@ -1,6 +1,4 @@
 package org.example.backend.services;
-import org.example.backend.dtos.AnimalIdOutputDto;
-import org.example.backend.dtos.TerrariumIdOutputDto;
 import org.example.backend.exceptions.CreationFailedException;
 import org.example.backend.exceptions.DeletionFailedException;
 import org.example.backend.exceptions.NotFoundException;
@@ -34,7 +32,7 @@ public class TerrariumService {
 
     public List<Terrarium> getAllTerraria() {
         List<Terrarium> terrariumList = (List<Terrarium>) terrariumRepository.findAll();
-        ArrayList<Terrarium> returnTerrariumList = new ArrayList<Terrarium>();
+        ArrayList<Terrarium> returnTerrariumList = new ArrayList<>();
         for (Terrarium terrarium : terrariumList) {
             returnTerrariumList.add(returnTerrariumWithVolume(terrarium));
         }
