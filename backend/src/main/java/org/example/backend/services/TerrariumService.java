@@ -7,6 +7,7 @@ import org.example.backend.models.Terrarium;
 import org.example.backend.repositories.TerrariumRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,12 +20,30 @@ public class TerrariumService {
         this.terrariumRepository = terrariumRepository;
     }
 
-    public List<Terrarium> getAllTerraria() {return (List<Terrarium>) terrariumRepository.findAll();}
+    private Terrarium returnTerrariumWithVolume(Terrarium terrarium) {
+        return new Terrarium(
+                terrarium.getId(),
+                terrarium.getName(),
+                terrarium.getHeight(),
+                terrarium.getWidth(),
+                terrarium.getDepth()
+        );
+    }
+
+    public List<Terrarium> getAllTerraria() {
+        List<Terrarium> terrariumList = (List<Terrarium>) terrariumRepository.findAll();
+        ArrayList<Terrarium> returnTerrariumList = new ArrayList<>();
+        for (Terrarium terrarium : terrariumList) {
+            returnTerrariumList.add(returnTerrariumWithVolume(terrarium));
+        }
+        return returnTerrariumList;
+    }
+
 
     public Terrarium getTerrariumById(int id) {
         Optional<Terrarium> foundTerrarium = terrariumRepository.findById(id);
         if (foundTerrarium.isPresent()) {
-            return foundTerrarium.get();
+            return returnTerrariumWithVolume(foundTerrarium.get());
         } else {
             throw new NotFoundException("terrarium", id);
         }

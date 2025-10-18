@@ -17,10 +17,12 @@ public class TerrariumController {
 
     public TerrariumController(TerrariumService terrariumService) {this.terrariumService = terrariumService;}
 
+
     @GetMapping
     public List<Terrarium> getAllTerrariumIds(HttpServletResponse response) {
         response.setHeader("X-Clacks-Overhead", "GNU Terry Pratchett");
         return terrariumService.getAllTerraria();
+
     }
 
     @PostMapping
