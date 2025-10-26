@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {type FormEvent, useState} from "react";
 import {Button, Col, Form, Modal, Row} from "react-bootstrap";
 import type {Animal} from "../../types/Animal.ts";
 import type {Species} from "../../types/Species.ts";
@@ -17,6 +17,7 @@ export default function AnimalModalUpdate({show, setShow, updateAnimal, animal, 
 
     const originalAnimal = animal
     const [updatedAnimal, setUpdatedAnimal] = useState(animal)
+    const [validated, setValidated] = useState<boolean>(false)
 
     function handleChangeName(value: string) {
         setUpdatedAnimal(
@@ -73,35 +74,50 @@ export default function AnimalModalUpdate({show, setShow, updateAnimal, animal, 
     }
 
     function undo() {
+        setValidated(false)
         setUpdatedAnimal(originalAnimal)
     }
 
-    function submitUpdatedAnimal() {
-        updateAnimal(updatedAnimal)
+    function handleClose () {
+        setValidated(false)
+        setUpdatedAnimal(originalAnimal)
         setShow(false)
     }
 
+    function submitUpdatedAnimal(e: FormEvent<HTMLFormElement>, form: HTMLFormElement) {
+        e.preventDefault()
+        if (!form.checkValidity()) {
+            setValidated(true)
+        } else {
+            updateAnimal(updatedAnimal)
+            setValidated(false)
+            setShow(false)
+        }
+    }
+
     return (
-        <Modal show={show} onHide={()=> setShow(false)}>
-            <Modal.Header>
-                <Modal.Title>Tier verändern</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Form>
+        <Modal show={show} onHide={()=> handleClose}>
+            <Form noValidate validated={validated} onSubmit={(e) => submitUpdatedAnimal(e, e.currentTarget )}>
+                <Modal.Header>
+                    <Modal.Title>Tier verändern</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
                     <Row>
                         <Col>
                             <Form.Group controlId="animalName">
                                 <Form.Label>Name</Form.Label>
                                 <Form.Control
+                                    required
                                     onChange={(e) => handleChangeName(e.target.value) }
                                     type="text"
                                     value={updatedAnimal.name}/>
+                                <Form.Control.Feedback type='invalid'>Bitte gib einen Namen für das Tier ein</Form.Control.Feedback>
                             </Form.Group>
                         </Col>
                         <Col>
                             <Form.Group controlId="animalSpecies">
                                 <Form.Label>Species</Form.Label>
-                                <Form.Select onChange={(e) => handleChangeSpecies(e.target.value)} aria-label="Auswahl der Spezies">
+                                <Form.Select required onChange={(e) => handleChangeSpecies(e.target.value)} aria-label="Auswahl der Spezies">
                                     {speciesList.map(species => <option selected={updatedAnimal.species === species.genus} value={species.genus}>{species.genus}</option>)}
                                 </Form.Select>
                             </Form.Group>
@@ -111,7 +127,7 @@ export default function AnimalModalUpdate({show, setShow, updateAnimal, animal, 
                         <Col>
                             <Form.Group controlId="animalTerrarium">
                                 <Form.Label>Terrarium</Form.Label>
-                                <Form.Select onChange={(e) => handleChangeTerrarium(e.target.value)} aria-label="Auswahl des Terrariums">
+                                <Form.Select required onChange={(e) => handleChangeTerrarium(e.target.value)} aria-label="Auswahl des Terrariums">
                                     {terrariumList.map(terrarium => <option selected={updatedAnimal.terrarium === terrarium.name} value={terrarium.name}>{terrarium.name}</option>)}
                                 </Form.Select>
                             </Form.Group>
@@ -121,7 +137,7 @@ export default function AnimalModalUpdate({show, setShow, updateAnimal, animal, 
                         <Col>
                             <Form.Group controlId="animalGender">
                                 <Form.Label>Species</Form.Label>
-                                <Form.Select onChange={(e) => handleChangeGender(e.target.value)} aria-label="Auswahl des Geschlechts">
+                                <Form.Select required onChange={(e) => handleChangeGender(e.target.value)} aria-label="Auswahl des Geschlechts">
                                     <option selected={updatedAnimal.gender==="weiblich"} value="weiblich">weiblich</option>
                                     <option value="männlich" selected={updatedAnimal.gender==="männlich"}>männlich</option>
                                     <option value="zweigeschlechtlich" selected={updatedAnimal.gender==="zweigeschlechtlich"}>zweigeschlechtlich</option>
@@ -133,9 +149,11 @@ export default function AnimalModalUpdate({show, setShow, updateAnimal, animal, 
                             <Form.Group controlId="animalBirthdate">
                                 <Form.Label>Geburtsdatum</Form.Label>
                                 <Form.Control
+                                    required
                                     onChange={(e) => handleChangeBirthdate(e.target.value) }
                                     value={updatedAnimal.birthDate}
                                     type="date" />
+                                <Form.Control.Feedback type='invalid'>Bitte gib das Geburtsdatum oder das Ankunfstdatum an</Form.Control.Feedback>
                             </Form.Group>
                         </Col>
                     </Row>
@@ -151,19 +169,19 @@ export default function AnimalModalUpdate({show, setShow, updateAnimal, animal, 
                             </Form.Group>
                         </Col>
                     </Row>
-                </Form>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="primary" onClick={() => submitUpdatedAnimal()}>
-                    Speichern
-                </Button>
-                <Button variant="secondary" onClick={() => undo()}>
-                    Undo
-                </Button>
-                <Button variant="secondary" onClick={() => setShow(false)}>
-                    Abbrechen
-                </Button>
-            </Modal.Footer>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" type="submit">
+                        Speichern
+                    </Button>
+                    <Button variant="secondary" onClick={() => undo()}>
+                        Undo
+                    </Button>
+                    <Button variant="secondary" onClick={() => handleClose()}>
+                        Abbrechen
+                    </Button>
+                </Modal.Footer>
+            </Form>
         </Modal>
     )
 }
