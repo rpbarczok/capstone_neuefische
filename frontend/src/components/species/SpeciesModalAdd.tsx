@@ -1,5 +1,5 @@
 import {Button, Col, Form, Modal, Row} from "react-bootstrap";
-import {useState} from "react";
+import {type FormEvent, useState} from "react";
 import type {SpeciesCreation} from "../../types/SpeciesCreation.ts";
 
 
@@ -12,7 +12,7 @@ type SpeciesAddFormProps = {
 export default function SpeciesModalAdd({show, setShow, addSpecies}: SpeciesAddFormProps) {
     const emptySpeciesCreation={genus: "", imgUrl: "", origin: ""}
     const [newSpecies, setNewSpecies] = useState<SpeciesCreation>(emptySpeciesCreation)
-
+    const [validated, setValidated] = useState<boolean>(false)
     function handleChangeGenus(value: string) {
 
         setNewSpecies(
@@ -42,24 +42,37 @@ export default function SpeciesModalAdd({show, setShow, addSpecies}: SpeciesAddF
             }
         )
     }
-    function submitNewSpecies () {
-        addSpecies(newSpecies)
+
+    function handleClose() {
+        setValidated(false)
         setNewSpecies(emptySpeciesCreation)
         setShow(false)
     }
+    function submitNewSpecies (e: FormEvent<HTMLFormElement>, form: HTMLFormElement) {
+        e.preventDefault()
+        if (!form.checkValidity()) {
+            setValidated(true)
+        } else {
+            addSpecies(newSpecies)
+            setNewSpecies(emptySpeciesCreation)
+            setValidated(false)
+            setShow(false)
+        }
+    }
 
     return (
-        <Modal show={show} onHide={() => setShow(false)}>
-            <Modal.Header closeButton>
-                <Modal.Title>Spezies hinzufügen</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Form>
+        <Modal show={show} onHide={() => handleClose()}>
+            <Form noValidate validated={validated} onSubmit={(e) => submitNewSpecies(e, e.currentTarget)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Spezies hinzufügen</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
                     <Row>
                         <Col>
                             <Form.Group controlId="speciesGenus">
                                 <Form.Label>Genus</Form.Label>
-                                <Form.Control onChange={(e) => handleChangeGenus(e.target.value) } type="text" />
+                                <Form.Control required onChange={(e) => handleChangeGenus(e.target.value) } type="text" />
+                                <Form.Control.Feedback type='invalid'>Bitte gib den Namen der Species an</Form.Control.Feedback>
                             </Form.Group>
                         </Col>
                         <Col>
@@ -77,16 +90,16 @@ export default function SpeciesModalAdd({show, setShow, addSpecies}: SpeciesAddF
                             </Form.Group>
                         </Col>
                     </Row>
-                </Form>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="primary" onClick={() => submitNewSpecies()}>
-                    Abspeichern
-                </Button>
-                <Button variant="secondary" onClick={() => setShow(false)}>
-                    Abbrechen
-                </Button>
-            </Modal.Footer>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" type="submit">
+                        Abspeichern
+                    </Button>
+                    <Button variant="secondary" onClick={() => handleClose()}>
+                        Abbrechen
+                    </Button>
+                </Modal.Footer>
+            </Form>
         </Modal>
     )
 }

@@ -4,7 +4,7 @@ import type {Species} from "../types/Species.ts";
 import AnimalCard from "../components/animals/AnimalCard.tsx";
 import {Col, Row} from "react-bootstrap";
 import {useState} from "react";
-import AnimalAddForm from "../components/animals/AnimalAddForm.tsx";
+import AnimalModalAdd from "../components/animals/AnimalModalAdd.tsx";
 import type {AnimalCreation} from "../types/AnimalCreation.ts";
 import type {Terrarium} from "../types/Terrarium.ts";
 
@@ -27,7 +27,7 @@ export default function AnimalPage({animalList, addAnimal, updateAnimal, deleteA
             title="Deine Lieblinge"
             page="animals"
             setShow={setShow}/>
-            <AnimalAddForm
+            <AnimalModalAdd
                 show={show}
                 setShow={setShow}
                 speciesList={speciesList}
